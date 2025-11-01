@@ -1,0 +1,34 @@
+plugins {
+    id 'idea'
+    id 'application'
+    id 'org.beryx.jlink' version '3.1.2'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls' ]
+}
+
+application {
+    mainClass = "org.openjfx.isosurface.Main"
+    mainModule = "IsosurfaceExtraction.main"
+}
+
+jlink {
+    options = ['--strip-debug', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'IsosurfaceExtraction'
+    }
+}
