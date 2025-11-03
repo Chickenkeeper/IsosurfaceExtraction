@@ -37,6 +37,8 @@ public final class Main extends Application {
         settingsPanel.getTorusMajorRadius().valueProperty().addListener(observable -> updateVoxelGrid());
         settingsPanel.getTorusMinorRadius().valueProperty().addListener(observable -> updateVoxelGrid());
         settingsPanel.getSphereRadius().valueProperty().addListener(observable -> updateVoxelGrid());
+        settingsPanel.getConeRadius().valueProperty().addListener(observable -> updateVoxelGrid());
+        settingsPanel.getConeHeight().valueProperty().addListener(observable -> updateVoxelGrid());
         settingsPanel.getBoxWidth().valueProperty().addListener(observable -> updateVoxelGrid());
         settingsPanel.getBoxHeight().valueProperty().addListener(observable -> updateVoxelGrid());
         settingsPanel.getBoxDepth().valueProperty().addListener(observable -> updateVoxelGrid());

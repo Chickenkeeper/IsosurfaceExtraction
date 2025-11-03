@@ -8,10 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.*;
-import org.openjfx.isosurface.sdf.Box;
-import org.openjfx.isosurface.sdf.SdfShape;
-import org.openjfx.isosurface.sdf.Sphere;
-import org.openjfx.isosurface.sdf.Torus;
+import org.openjfx.isosurface.sdf.*;
 import org.openjfx.isosurface.suface.Blocky;
 import org.openjfx.isosurface.suface.MarchingCubes;
 import org.openjfx.isosurface.suface.SdfMeshBuilder;
@@ -22,6 +19,7 @@ import org.openjfx.isosurface.suface.SdfMeshBuilder;
 public final class SettingsPanel {
     private final Torus torusShape;
     private final Sphere sphereShape;
+    private final Cone coneShape;
     private final Box boxShape;
 
     // shape properties
@@ -29,6 +27,8 @@ public final class SettingsPanel {
     private final NumberField torusMajorRadius;
     private final NumberField torusMinorRadius;
     private final NumberField sphereRadius;
+    private final NumberField coneRadius;
+    private final NumberField coneHeight;
     private final NumberField boxWidth;
     private final NumberField boxHeight;
     private final NumberField boxDepth;
@@ -66,10 +66,11 @@ public final class SettingsPanel {
     public SettingsPanel() {
         torusShape = new Torus();
         sphereShape = new Sphere();
+        coneShape = new Cone();
         boxShape = new Box();
 
         shapeSelector = new ComboBox<>();
-        shapeSelector.getItems().setAll(torusShape, sphereShape, boxShape);
+        shapeSelector.getItems().setAll(torusShape, sphereShape, coneShape, boxShape);
         shapeSelector.setValue(shapeSelector.getItems().getFirst());
 
         torusMajorRadius = new NumberField(0.0, Double.MAX_VALUE, Torus.DEFAULT_MAJOR_RADIUS);
@@ -84,6 +85,14 @@ public final class SettingsPanel {
         sphereRadius.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(sphereShape));
         shapeSelector.prefWidthProperty().bind(sphereRadius.widthProperty());
         sphereShape.radiusProperty().bind(sphereRadius.valueProperty());
+
+        coneRadius = new NumberField(0.0, Double.MAX_VALUE, Cone.DEFAULT_RADIUS);
+        coneRadius.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(coneShape));
+        coneShape.radiusProperty().bind(coneRadius.valueProperty());
+
+        coneHeight = new NumberField(0.0, Double.MAX_VALUE, Cone.DEFAULT_HEIGHT);
+        coneHeight.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(coneShape));
+        coneShape.heightProperty().bind(coneHeight.valueProperty());
 
         boxWidth = new NumberField(0.0, Double.MAX_VALUE, Box.DEFAULT_WIDTH);
         boxWidth.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(boxShape));
@@ -205,6 +214,12 @@ public final class SettingsPanel {
         final Label sphereRadiusLabel = new Label("Radius");
         sphereRadiusLabel.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(sphereShape));
 
+        final Label coneRadiusLabel = new Label("Radius");
+        coneRadiusLabel.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(coneShape));
+
+        final Label coneHeightLabel = new Label("Height");
+        coneHeightLabel.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(coneShape));
+
         final Label boxWidthLabel = new Label("Width");
         boxWidthLabel.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(boxShape));
 
@@ -225,6 +240,11 @@ public final class SettingsPanel {
         sphereRowConstraint.prefHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(sphereShape)).then(rowHeight).otherwise(0.0));
         sphereRowConstraint.minHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(sphereShape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
         sphereRowConstraint.maxHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(sphereShape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
+
+        final RowConstraints coneRowConstraint = new RowConstraints();
+        coneRowConstraint.prefHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(coneShape)).then(rowHeight).otherwise(0.0));
+        coneRowConstraint.minHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(coneShape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
+        coneRowConstraint.maxHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(coneShape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
 
         final RowConstraints boxRowConstraint = new RowConstraints();
         boxRowConstraint.prefHeightProperty().bind(Bindings.when(shapeSelector.valueProperty().isEqualTo(boxShape)).then(rowHeight).otherwise(0.0));
@@ -255,39 +275,47 @@ public final class SettingsPanel {
         grid.add(sphereRadius, 1, 3, 3, 1);
         grid.getRowConstraints().add(sphereRowConstraint);
 
-        grid.add(boxWidthLabel, 0, 4);
-        grid.add(boxWidth, 1, 4, 3, 1);
+        grid.add(coneRadiusLabel, 0, 4);
+        grid.add(coneRadius, 1, 4, 3, 1);
+        grid.getRowConstraints().add(coneRowConstraint);
+
+        grid.add(coneHeightLabel, 0, 5);
+        grid.add(coneHeight, 1, 5, 3, 1);
+        grid.getRowConstraints().add(coneRowConstraint);
+
+        grid.add(boxWidthLabel, 0, 6);
+        grid.add(boxWidth, 1, 6, 3, 1);
         grid.getRowConstraints().add(boxRowConstraint);
 
-        grid.add(boxHeightLabel, 0, 5);
-        grid.add(boxHeight, 1, 5, 3, 1);
+        grid.add(boxHeightLabel, 0, 7);
+        grid.add(boxHeight, 1, 7, 3, 1);
         grid.getRowConstraints().add(boxRowConstraint);
 
-        grid.add(boxDepthLabel, 0, 6);
-        grid.add(boxDepth, 1, 6, 3, 1);
+        grid.add(boxDepthLabel, 0, 8);
+        grid.add(boxDepth, 1, 8, 3, 1);
         grid.getRowConstraints().add(boxRowConstraint);
 
-        grid.add(xLabel, 1, 7);
-        grid.add(yLabel, 2, 7);
-        grid.add(zLabel, 3, 7);
+        grid.add(xLabel, 1, 9);
+        grid.add(yLabel, 2, 9);
+        grid.add(zLabel, 3, 9);
         grid.getRowConstraints().add(otherRowConstraint);
 
-        grid.add(translationLabel, 0, 8);
-        grid.add(shapeTranslationX, 1, 8);
-        grid.add(shapeTranslationY, 2, 8);
-        grid.add(shapeTranslationZ, 3, 8);
+        grid.add(translationLabel, 0, 10);
+        grid.add(shapeTranslationX, 1, 10);
+        grid.add(shapeTranslationY, 2, 10);
+        grid.add(shapeTranslationZ, 3, 10);
         grid.getRowConstraints().add(otherRowConstraint);
 
-        grid.add(rotationLabel, 0, 9);
-        grid.add(shapeRotationX, 1, 9);
-        grid.add(shapeRotationY, 2, 9);
-        grid.add(shapeRotationZ, 3, 9);
+        grid.add(rotationLabel, 0, 11);
+        grid.add(shapeRotationX, 1, 11);
+        grid.add(shapeRotationY, 2, 11);
+        grid.add(shapeRotationZ, 3, 11);
         grid.getRowConstraints().add(otherRowConstraint);
 
-        grid.add(scaleLabel, 0, 10);
-        grid.add(shapeScaleX, 1, 10);
-        grid.add(shapeScaleY, 2, 10);
-        grid.add(shapeScaleZ, 3, 10);
+        grid.add(scaleLabel, 0, 12);
+        grid.add(shapeScaleX, 1, 12);
+        grid.add(shapeScaleY, 2, 12);
+        grid.add(shapeScaleZ, 3, 12);
         grid.getRowConstraints().add(otherRowConstraint);
 
         GridPane.setHalignment(xLabel, HPos.CENTER);
@@ -434,6 +462,14 @@ public final class SettingsPanel {
      */
     public NumberField getSphereRadius() {
         return sphereRadius;
+    }
+
+    public NumberField getConeRadius() {
+        return coneRadius;
+    }
+
+    public NumberField getConeHeight() {
+        return coneHeight;
     }
 
     /**
