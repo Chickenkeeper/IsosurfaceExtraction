@@ -13,7 +13,13 @@ public final class ModelViewer {
     private static final double DEFAULT_WINDOW_WIDTH = 800;
     private static final double DEFAULT_WINDOW_HEIGHT = 600;
     private static final SceneAntialiasing DEFAULT_ANTIALIASING = SceneAntialiasing.BALANCED;
+    private static final Color DIRECTIONAL_LIGHT_COLOUR_FILL = new Color(0.7, 0.7, 0.7, 1.0);
+    private static final Color DIRECTIONAL_LIGHT_COLOUR_WIRE = Color.BLACK;
+    private static final Color AMBIENT_LIGHT_COLOUR_FILL = new Color(0.2, 0.2, 0.2, 1.0);
+    private static final Color AMBIENT_LIGHT_COLOUR_WIRE = Color.WHITE;
 
+    private final AmbientLight ambientLight;
+    private final DirectionalLight directionalLight;
     private final MeshView model;
     private final OrbitCamera camera;
     private final SubScene root;
@@ -45,9 +51,9 @@ public final class ModelViewer {
 
         camera = new OrbitCamera();
 
-        final AmbientLight ambientLight = new AmbientLight(new Color(0.2, 0.2, 0.2, 1.0));
+        ambientLight = new AmbientLight(AMBIENT_LIGHT_COLOUR_FILL);
 
-        final DirectionalLight directionalLight = new DirectionalLight(new Color(0.7, 0.7, 0.7, 1.0));
+        directionalLight = new DirectionalLight(DIRECTIONAL_LIGHT_COLOUR_FILL);
         directionalLight.getTransforms().addAll(
                 new Rotate(180, Rotate.Z_AXIS),
                 camera.getYaw(),
@@ -124,11 +130,19 @@ public final class ModelViewer {
     }
 
     /**
-     * sets whether the 3D model should be drawn as a wireframe.
+     * Sets whether the 3D model should be drawn as a wireframe.
      *
      * @param wireframe whether the 3D model should be drawn as a wireframe
      */
     public void setWireframe(boolean wireframe) {
-        model.setDrawMode(wireframe ? DrawMode.LINE : DrawMode.FILL);
+        if (wireframe) {
+            model.setDrawMode(DrawMode.LINE);
+            ambientLight.setColor(AMBIENT_LIGHT_COLOUR_WIRE);
+            directionalLight.setColor(DIRECTIONAL_LIGHT_COLOUR_WIRE);
+        } else {
+            model.setDrawMode(DrawMode.FILL);
+            ambientLight.setColor(AMBIENT_LIGHT_COLOUR_FILL);
+            directionalLight.setColor(DIRECTIONAL_LIGHT_COLOUR_FILL);
+        }
     }
 }
