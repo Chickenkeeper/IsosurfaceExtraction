@@ -382,7 +382,7 @@ public final class SettingsPanel {
      * Adds the statistics section to this settings panel.
      */
     private void addStatisticsPane() {
-        final Label degenTriThresholdLabel = new Label("Degen Tri Threshold");
+        final Label degenTriThresholdLabel = new Label("Degenerate Tri Threshold");
         final Label totalTriangles = new Label("Total triangles");
         final Label degenerateTrianglesLabel = new Label("Degenerate triangles");
         final Label voxelizationTimeLabel = new Label("Voxelization time");

@@ -1,3 +1,143 @@
+* {
+    -dark: hsb(0, 0%, 10%);
+    -dim: hsb(0, 0%, 20%);
+    -mid: hsb(0, 0%, 30%);
+    -light: hsb(0, 0%, 40%);
+
+    -highlight-dark: hsb(0, 0%, 15%);
+    -highlight-mid: hsb(0, 0%, 40%);
+    -highlight-light: hsb(0, 0%, 50%);
+    -highlight-blue: hsb(215, 65%, 70%);
+}
+
 .settings-grid {
     -fx-hgap: 0.5em;
+}
+
+.label, .text-field {
+    -fx-text-fill: white;
+}
+
+.text-field {
+    -fx-background-color: -mid;
+    -fx-background-radius: 5;
+    -fx-border-color: -dim;
+    -fx-highlight-fill: -highlight-blue;
+}
+
+.text-field:hover {
+    -fx-background-color: -highlight-mid;
+}
+
+.combo-box {
+    -fx-background-color: -dark;
+}
+
+.combo-box:hover {
+    -fx-background-color: -highlight-dark;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+
+.combo-box-popup > .list-view {
+    -fx-padding: 0;
+}
+
+.combo-box-popup > .list-view .list-cell {
+    -fx-background-color: -dark;
+}
+
+.combo-box-popup > .list-view .list-cell:filled:hover {
+    -fx-background-color: -highlight-dark;
+}
+
+.combo-box-popup > .list-view .list-cell:filled:selected,
+.combo-box-popup > .list-view .list-cell:filled:selected:hover {
+    -fx-background-color: -highlight-blue;
+}
+
+.arrow, .check-box:selected > .box > .mark {
+    -fx-background-color: white;
+}
+
+.check-box > .box {
+    -fx-background-color: -dark;
+}
+
+.check-box:hover > .box {
+    -fx-background-color: -highlight-dark;
+}
+
+.check-box > .box > .mark {
+    -fx-background-color: transparent;
+}
+
+.titled-pane {
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -mid;
+    -fx-font-size: 105%;
+    -fx-font-weight: bold;
+    -fx-background-radius: 0;
+}
+
+.titled-pane > .title:hover {
+    -fx-background-color: -highlight-mid;
+}
+
+.titled-pane > .title > .arrow-button > .arrow,
+.titled-pane:focused > .title > .arrow-button > .arrow {
+    -fx-effect: null;
+    -fx-background-insets: 0;
+}
+
+.titled-pane > .content {
+    -fx-background-color: -dim;
+    -fx-border-color: -dim;
+}
+
+.split-pane {
+    -fx-padding: 0;
+}
+
+.split-pane-divider {
+    -fx-background-color: -light;
+}
+
+.split-pane-divider:hover {
+    -fx-background-color: -highlight-light;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: -dim;
+}
+
+.scroll-bar,
+.scroll-bar > .track {
+    -fx-border-color: -mid;
+    -fx-background-color: -mid;
+}
+
+.scroll-bar:vertical > .increment-button,
+.scroll-bar:vertical > .decrement-button {
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+}
+
+.scroll-bar:vertical > .increment-button > .increment-arrow,
+.scroll-bar:vertical > .decrement-button > .decrement-arrow {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: -dark;
+}
+
+.scroll-bar > .thumb:hover {
+    -fx-background-color: -highlight-dark;
 }
