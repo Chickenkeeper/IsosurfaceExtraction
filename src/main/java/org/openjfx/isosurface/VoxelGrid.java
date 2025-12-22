@@ -205,15 +205,16 @@ public final class VoxelGrid {
      */
     public void fitToShape(SdfShape shape) {
         final float voxelSize = getVoxelSize();
+        final float voxelSizeReciprocal = 1.0f / voxelSize;
         final BoundingBox shapeBounds = shape.getWorldBounds();
 
-        posX = ((float) Math.floor(shapeBounds.getMinX() / voxelSize) - 1.0f) * voxelSize;
-        posY = ((float) Math.floor(shapeBounds.getMinY() / voxelSize) - 1.0f) * voxelSize;
-        posZ = ((float) Math.floor(shapeBounds.getMinZ() / voxelSize) - 1.0f) * voxelSize;
+        posX = ((float) Math.floor(shapeBounds.getMinX() * voxelSizeReciprocal) - 1.0f) * voxelSize;
+        posY = ((float) Math.floor(shapeBounds.getMinY() * voxelSizeReciprocal) - 1.0f) * voxelSize;
+        posZ = ((float) Math.floor(shapeBounds.getMinZ() * voxelSizeReciprocal) - 1.0f) * voxelSize;
 
-        width = (int) Math.ceil(shapeBounds.getWidth() / voxelSize) + 2;
-        height = (int) Math.ceil(shapeBounds.getHeight() / voxelSize) + 2;
-        depth = (int) Math.ceil(shapeBounds.getDepth() / voxelSize) + 2;
+        width = (int) Math.ceil(shapeBounds.getWidth() * voxelSizeReciprocal) + 2;
+        height = (int) Math.ceil(shapeBounds.getHeight() * voxelSizeReciprocal) + 2;
+        depth = (int) Math.ceil(shapeBounds.getDepth() * voxelSizeReciprocal) + 2;
 
         final int numVoxels = width * height * depth;
 
