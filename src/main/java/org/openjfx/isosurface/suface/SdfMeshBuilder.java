@@ -49,7 +49,7 @@ public abstract class SdfMeshBuilder {
 
     /**
      * Adds a quad to a triangle mesh, reusing existing points if possible to allow for smooth normals.
-     * The quad is automatically triangulated into two separate triangles.
+     * The quad is automatically split into two separate triangles along its shortest diagonal.
      *
      * @param p0          the first point of the quad
      * @param p1          the second point of the quad
@@ -89,7 +89,16 @@ public abstract class SdfMeshBuilder {
             mesh.getPoints().addAll(p3.x(), p3.y(), p3.z());
         }
 
-        mesh.getFaces().addAll(p0Index, 0, p1Index, 0, p2Index, 0, p0Index, 0, p2Index, 0, p3Index, 0);
+        final float distSqP0P2 = p0.distSq(p2);
+        final float distSqP1P3 = p1.distSq(p3);
+
+        // split quad along shortest diagonal
+        if (Math.abs(distSqP0P2 - distSqP1P3) > 0.0001f && distSqP0P2 < distSqP1P3) {
+            mesh.getFaces().addAll(p0Index, 0, p1Index, 0, p2Index, 0, p0Index, 0, p2Index, 0, p3Index, 0);
+        } else {
+            mesh.getFaces().addAll(p0Index, 0, p1Index, 0, p3Index, 0, p1Index, 0, p2Index, 0, p3Index, 0);
+        }
+
         mesh.getFaceSmoothingGroups().addAll(smoothGroup, smoothGroup);
     }
 
