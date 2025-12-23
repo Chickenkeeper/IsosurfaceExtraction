@@ -40,17 +40,6 @@ public class SurfaceNets extends SdfMeshBuilder {
             }
     };
 
-    private Float3 getVertex(float isoLevel, Float3 p0, Float3 p1, float d0, float d1) {
-        final float div = d1 - d0;
-
-        if (div != 0) { // prevents division by 0 while `un-lerp`-ing
-            final float t = (isoLevel - d0) / div;
-            return p0.lerp(p1, t);
-        } else {
-            return p0;
-        }
-    }
-
     @Override
     public void buildMesh(VoxelGrid voxelGrid, float isoLevel, boolean smoothShading, TriangleMesh mesh) {
         final HashMap<Int3, Float3> voxelPoints = new HashMap<>();
@@ -85,7 +74,7 @@ public class SurfaceNets extends SdfMeshBuilder {
                         // end is inside the shape and the other end is outside
                         if (pEndExterior != pStartExterior) {
                             final Float3 pEnd = voxelGrid.getVoxelCenterPos(endCoord);
-                            final Float3 vertex = getVertex(isoLevel, pStart, pEnd, dStart, dEnd);
+                            final Float3 vertex = edgeIntersection(isoLevel, pStart, pEnd, dStart, dEnd);
 
                             // add the position of the edge intersection to the
                             // points inside the four voxels that share the edge

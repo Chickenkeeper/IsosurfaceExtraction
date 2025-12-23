@@ -305,17 +305,6 @@ public class MarchingCubes extends SdfMeshBuilder {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     };
 
-    private Float3 getVertex(float isoLevel, Float3 p0, Float3 p1, float d0, float d1) {
-        final float div = d1 - d0;
-
-        if (div != 0) { // prevents division by 0 while `un-lerp`-ing
-            final float t = (isoLevel - d0) / div;
-            return p0.lerp(p1, t);
-        } else {
-            return p0;
-        }
-    }
-
     @Override
     public void buildMesh(VoxelGrid voxelGrid, float isoLevel, boolean smoothShading, TriangleMesh mesh) {
         /*
@@ -427,18 +416,18 @@ public class MarchingCubes extends SdfMeshBuilder {
 
                     // for some reason some implementations (such as the one this one is based on) either
                     // ignore this or correct the ordering on the fly at the expense of computational power.
-                    if ((edgeFlags & (1      )) != 0) edgeVerts[0 ] = getVertex(isoLevel, p0, p1, d0, d1);
-                    if ((edgeFlags & (1 << 1 )) != 0) edgeVerts[1 ] = getVertex(isoLevel, p1, p2, d1, d2);
-                    if ((edgeFlags & (1 << 2 )) != 0) edgeVerts[2 ] = getVertex(isoLevel, p3, p2, d3, d2);
-                    if ((edgeFlags & (1 << 3 )) != 0) edgeVerts[3 ] = getVertex(isoLevel, p0, p3, d0, d3);
-                    if ((edgeFlags & (1 << 4 )) != 0) edgeVerts[4 ] = getVertex(isoLevel, p4, p5, d4, d5);
-                    if ((edgeFlags & (1 << 5 )) != 0) edgeVerts[5 ] = getVertex(isoLevel, p5, p6, d5, d6);
-                    if ((edgeFlags & (1 << 6 )) != 0) edgeVerts[6 ] = getVertex(isoLevel, p7, p6, d7, d6);
-                    if ((edgeFlags & (1 << 7 )) != 0) edgeVerts[7 ] = getVertex(isoLevel, p4, p7, d4, d7);
-                    if ((edgeFlags & (1 << 8 )) != 0) edgeVerts[8 ] = getVertex(isoLevel, p0, p4, d0, d4);
-                    if ((edgeFlags & (1 << 9 )) != 0) edgeVerts[9 ] = getVertex(isoLevel, p1, p5, d1, d5);
-                    if ((edgeFlags & (1 << 10)) != 0) edgeVerts[10] = getVertex(isoLevel, p2, p6, d2, d6);
-                    if ((edgeFlags & (1 << 11)) != 0) edgeVerts[11] = getVertex(isoLevel, p3, p7, d3, d7);
+                    if ((edgeFlags & (1      )) != 0) edgeVerts[0 ] = edgeIntersection(isoLevel, p0, p1, d0, d1);
+                    if ((edgeFlags & (1 << 1 )) != 0) edgeVerts[1 ] = edgeIntersection(isoLevel, p1, p2, d1, d2);
+                    if ((edgeFlags & (1 << 2 )) != 0) edgeVerts[2 ] = edgeIntersection(isoLevel, p3, p2, d3, d2);
+                    if ((edgeFlags & (1 << 3 )) != 0) edgeVerts[3 ] = edgeIntersection(isoLevel, p0, p3, d0, d3);
+                    if ((edgeFlags & (1 << 4 )) != 0) edgeVerts[4 ] = edgeIntersection(isoLevel, p4, p5, d4, d5);
+                    if ((edgeFlags & (1 << 5 )) != 0) edgeVerts[5 ] = edgeIntersection(isoLevel, p5, p6, d5, d6);
+                    if ((edgeFlags & (1 << 6 )) != 0) edgeVerts[6 ] = edgeIntersection(isoLevel, p7, p6, d7, d6);
+                    if ((edgeFlags & (1 << 7 )) != 0) edgeVerts[7 ] = edgeIntersection(isoLevel, p4, p7, d4, d7);
+                    if ((edgeFlags & (1 << 8 )) != 0) edgeVerts[8 ] = edgeIntersection(isoLevel, p0, p4, d0, d4);
+                    if ((edgeFlags & (1 << 9 )) != 0) edgeVerts[9 ] = edgeIntersection(isoLevel, p1, p5, d1, d5);
+                    if ((edgeFlags & (1 << 10)) != 0) edgeVerts[10] = edgeIntersection(isoLevel, p2, p6, d2, d6);
+                    if ((edgeFlags & (1 << 11)) != 0) edgeVerts[11] = edgeIntersection(isoLevel, p3, p7, d3, d7);
 
                     final byte[] triIndexes = triTable[edgeTableIndex];
 

@@ -11,6 +11,29 @@ import java.util.HashMap;
  */
 public abstract class SdfMeshBuilder {
     /**
+     * Uses linear interpolation to compute the approximate point
+     * at which an edge intersects the surface of a scalar field.
+     * Based on an implementation by <a href="https://paulbourke.net/geometry/polygonise/">Paul Bourke</a>.
+     *
+     * @param isoLevel the distance defining the surface of the sdf
+     * @param p0       the position of the start of the edge
+     * @param p1       the position of the end of the edge
+     * @param d0       the sdf value at the start of the edge
+     * @param d1       the sdf value at the end of the edge
+     * @return the approximate intersection point between an edge and a sdf
+     */
+    protected static Float3 edgeIntersection(float isoLevel, Float3 p0, Float3 p1, float d0, float d1) {
+        final float denom = d1 - d0;
+
+        if (Math.abs(denom) > 0.00001f) { // prevents division by 0 while `un-lerp`-ing
+            final float t = (isoLevel - d0) / denom;
+            return p0.lerp(p1, t);
+        } else {
+            return p0;
+        }
+    }
+
+    /**
      * Adds a triangle to a triangle mesh, reusing existing points if possible to allow for smooth normals.
      *
      * @param p0          the first point of the triangle
