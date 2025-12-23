@@ -40,6 +40,20 @@ public record Float3(float x, float y, float z) {
     }
 
     /**
+     * Returns the result of multiplying this coordinate by a scalar.
+     *
+     * @param scalar the scalar to multiply this coordinate with
+     * @return this coordinate multiplied by the scalar
+     */
+    public Float3 mult(float scalar) {
+        return new Float3(
+                x * scalar,
+                y * scalar,
+                z * scalar
+        );
+    }
+
+    /**
      * Linearly interpolates this coordinate towards another.
      *
      * @param target the coordinate to interpolate towards

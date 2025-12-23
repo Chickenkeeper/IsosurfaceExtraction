@@ -2,9 +2,11 @@
   <dictionary name="project">
     <words>
       <w>acos</w>
+      <w>coord</w>
       <w>coords</w>
       <w>degen</w>
       <w>lerp</w>
+      <w>mult</w>
       <w>verts</w>
     </words>
   </dictionary>

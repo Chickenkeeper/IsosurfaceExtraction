@@ -12,6 +12,7 @@ import org.openjfx.isosurface.sdf.*;
 import org.openjfx.isosurface.suface.Blocky;
 import org.openjfx.isosurface.suface.MarchingCubes;
 import org.openjfx.isosurface.suface.SdfMeshBuilder;
+import org.openjfx.isosurface.suface.SurfaceNets;
 
 /**
  * The main settings panel for this application.
@@ -132,11 +133,12 @@ public final class SettingsPanel {
             shape.scaleZProperty().bind(shapeScaleZ.valueProperty());
         }
 
-        final Blocky blockyMeshBuilder = new Blocky();
-        final MarchingCubes marchingCubesMeshBuilder = new MarchingCubes();
+        final SdfMeshBuilder surfaceNetsMeshBuilder = new SurfaceNets();
+        final SdfMeshBuilder marchingCubesMeshBuilder = new MarchingCubes();
+        final SdfMeshBuilder blockyMeshBuilder = new Blocky();
 
         algorithmSelector = new ComboBox<>();
-        algorithmSelector.getItems().setAll(marchingCubesMeshBuilder, blockyMeshBuilder);
+        algorithmSelector.getItems().setAll(surfaceNetsMeshBuilder, marchingCubesMeshBuilder, blockyMeshBuilder);
         algorithmSelector.setValue(algorithmSelector.getItems().getFirst());
 
         voxelSize = new NumberField(0.025, 0.25, 0.1, 0.005, "0.000");

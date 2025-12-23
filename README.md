@@ -10,3 +10,4 @@ This application is written in Java using JavaFX, for the purpose of learning an
 
 - Blocky
 - Marching Cubes
+- Surface Nets

@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.geometry.BoundingBox;
 import org.openjfx.isosurface.sdf.SdfShape;
 import org.openjfx.isosurface.util.Float3;
+import org.openjfx.isosurface.util.Int3;
 
 /**
  * Stores a 3D scalar field from which surface meshes can be extracted with an {@code SdfMeshBuilder}.
@@ -125,6 +126,17 @@ public final class VoxelGrid {
     }
 
     /**
+     * Returns the value stored at the specified voxel coordinate,
+     * or a large default value if the coordinate is out of bounds.
+     *
+     * @param coords the coordinates of the voxel
+     * @return the value stored at the specified coordinate, or a large default value if the coordinate is out of bounds
+     */
+    public float getVoxel(Int3 coords) {
+        return getVoxel(coords.x(), coords.y(), coords.z());
+    }
+
+    /**
      * Sets the value of the voxel at the specified voxel coordinate.
      * Note that no bounds checking is done, so errors may occur if
      * the voxel coordinate is out of bounds.
@@ -172,6 +184,18 @@ public final class VoxelGrid {
     public Float3 getVoxelCenterPos(int x, int y, int z) {
         final float halfVoxelSize = getVoxelSize() * 0.5f;
         return getVoxelCornerPos(x, y, z).add(new Float3(halfVoxelSize, halfVoxelSize, halfVoxelSize));
+    }
+
+    /**
+     * Gets the world-space position of the center of the voxel at the specified coordinate,
+     * as if each voxel is a cube in a 3D grid. Note no bounds checking is done, so the
+     * returned position may be outside the bounds of any voxels within the voxel grid.
+     *
+     * @param coords the coordinates of the voxel
+     * @return the world-space position of the center of the voxel at the specified coordinate
+     */
+    public Float3 getVoxelCenterPos(Int3 coords) {
+        return getVoxelCenterPos(coords.x(), coords.y(), coords.z());
     }
 
     /**
