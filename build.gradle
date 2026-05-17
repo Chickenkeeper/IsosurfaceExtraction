@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'application'
-    id 'org.beryx.jlink' version '3.1.2'
+    id 'org.beryx.jlink' version '3.2.1'
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
@@ -17,13 +17,16 @@ idea {
 }
 
 javafx {
-    version = "21"
+    version = "25"
     modules = [ 'javafx.controls' ]
 }
 
 application {
     mainClass = "org.openjfx.isosurface.Main"
     mainModule = "IsosurfaceExtraction.main"
+    applicationDefaultJvmArgs = [
+        '--enable-native-access=javafx.graphics'
+    ]
 }
 
 jlink {
