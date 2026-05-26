@@ -23,8 +23,8 @@ public final class NumberField extends TextField {
     private final NumberStringConverter converter;
 
     private double prevValue;
-    private double mouseAnchor;
-    private boolean wasDragged;
+    private double mouseAnchorX;
+    private double mouseAnchorY;
 
     /**
      * Creates a new {@code NumberField} node from a specified minimum,
@@ -41,22 +41,20 @@ public final class NumberField extends TextField {
         this.value = new SimpleDoubleProperty(value);
         this.converter = new NumberStringConverter(formatPattern);
         this.prevValue = 0.0;
-        this.mouseAnchor = 0.0;
-        this.wasDragged = false;
+        this.mouseAnchorX = 0.0;
+        this.mouseAnchorY = 0.0;
 
         this.value.addListener(_ -> setTextFromValue());
 
         setOnMouseDragged(e -> {
             if (!isEditable()) {
                 final double inc = e.isShiftDown() ? increment * 0.1 : increment; // use a smaller increment if shift is held
-                double newValue = prevValue + (e.getX() - mouseAnchor) * inc;
+                double newValue = prevValue + (e.getX() - mouseAnchorX) * inc;
                 newValue = Math.clamp(newValue, min, max);
 
                 // don't fire events if the numerical value hasn't changed
                 if (newValue != this.value.get()) {
                     this.value.set(newValue);
-                    setTextFromValue();
-                    wasDragged = true;
                 }
 
                 deselect(); // prevent stray selections while dragging
@@ -66,15 +64,13 @@ public final class NumberField extends TextField {
             if (!isEditable()) {
                 // prepare for dragging mode
                 prevValue = this.value.get();
-                mouseAnchor = e.getX();
-                wasDragged = false;
-                deselect();
+                mouseAnchorX = e.getX();
+                mouseAnchorY = e.getY();
             }
         });
-        setOnMouseReleased(_ -> {
-            if (!isEditable() && !wasDragged) {
+        setOnMouseReleased(e -> {
+            if (!isEditable() && e.getX() == mouseAnchorX && e.getY() == mouseAnchorY) {
                 // enter editing mode
-                setTextFromValue();
                 setEditable(true);
                 selectAll();
                 setCursor(Cursor.TEXT);
@@ -83,7 +79,7 @@ public final class NumberField extends TextField {
         setOnMouseEntered(_ -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
         setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
         setOnAction(_ -> setValueFromText()); // commit an entered value when enter(?) is pressed
-        setOnScroll(e ->  {
+        setOnScroll(e -> {
             final boolean shiftIsDown = e.isShiftDown();
             final double inc = shiftIsDown ? increment * 0.1 : increment; // use a smaller increment if shift is held
             double deltaScroll = shiftIsDown ? e.getDeltaX() : e.getDeltaY(); // scroll axes are swapped when shift is held
