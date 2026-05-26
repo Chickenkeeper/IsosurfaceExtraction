@@ -32,15 +32,15 @@ public abstract class SdfShape {
         this.translation = new Translate(0, 0, 0);
 
         // set up listeners so the combined transforms are only recalculated when a separate transform is changed
-        scale.xProperty().addListener(observable -> combinedTransformDirty = true);
-        scale.yProperty().addListener(observable -> combinedTransformDirty = true);
-        scale.zProperty().addListener(observable -> combinedTransformDirty = true);
-        rotationX.angleProperty().addListener(observable -> combinedTransformDirty = true);
-        rotationY.angleProperty().addListener(observable -> combinedTransformDirty = true);
-        rotationZ.angleProperty().addListener(observable -> combinedTransformDirty = true);
-        translation.xProperty().addListener(observable -> combinedTransformDirty = true);
-        translation.yProperty().addListener(observable -> combinedTransformDirty = true);
-        translation.zProperty().addListener(observable -> combinedTransformDirty = true);
+        scale.xProperty().addListener(_ -> combinedTransformDirty = true);
+        scale.yProperty().addListener(_ -> combinedTransformDirty = true);
+        scale.zProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationX.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationY.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationZ.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        translation.xProperty().addListener(_ -> combinedTransformDirty = true);
+        translation.yProperty().addListener(_ -> combinedTransformDirty = true);
+        translation.zProperty().addListener(_ -> combinedTransformDirty = true);
 
         // initialize the combined transforms
         updateCombinedTransforms();

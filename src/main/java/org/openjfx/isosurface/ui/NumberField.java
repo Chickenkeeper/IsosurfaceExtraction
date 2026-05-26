@@ -47,7 +47,7 @@ public final class NumberField extends TextField {
         this.wasDragged = false;
         this.smallIncrement = false;
 
-        this.value.addListener((observable, oldValue, newValue) -> setTextFromValue());
+        this.value.addListener(_ -> setTextFromValue());
 
         setOnMouseDragged(e -> {
             if (!isEditable()) {
@@ -74,7 +74,7 @@ public final class NumberField extends TextField {
                 deselect();
             }
         });
-        setOnMouseReleased(e -> {
+        setOnMouseReleased(_ -> {
             if (!isEditable() && !wasDragged) {
                 // enter editing mode
                 setTextFromValue();
@@ -83,9 +83,9 @@ public final class NumberField extends TextField {
                 setCursor(Cursor.TEXT);
             }
         });
-        setOnMouseEntered(e -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
-        setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
-        setOnAction(e -> setValueFromText()); // commit an entered value when enter(?) is pressed
+        setOnMouseEntered(_ -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
+        setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
+        setOnAction(_ -> setValueFromText()); // commit an entered value when enter(?) is pressed
         setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.SHIFT)) {
                 smallIncrement = true;
@@ -97,7 +97,7 @@ public final class NumberField extends TextField {
             }
         });
 
-        focusedProperty().addListener((observable, oldValue, newValue) -> {
+        focusedProperty().addListener((_, _, newValue) -> {
             if (!newValue) setValueFromText(); // commit an entered value if focus is lost
         });
 

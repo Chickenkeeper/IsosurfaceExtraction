@@ -33,29 +33,29 @@ public final class Main extends Application {
         settingsPanel = new SettingsPanel();
         modelViewer = new ModelViewer();
 
-        settingsPanel.getShapeSelector().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getTorusMajorRadius().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getTorusMinorRadius().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getSphereRadius().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getConeRadius().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getConeHeight().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getBoxWidth().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getBoxHeight().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getBoxDepth().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationX().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationY().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationZ().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeRotationX().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeRotationY().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeRotationZ().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeScaleX().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeScaleY().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getShapeScaleZ().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getAlgorithmSelector().valueProperty().addListener(observable -> updateMesh());
-        settingsPanel.getVoxelSize().valueProperty().addListener(observable -> updateVoxelGrid());
-        settingsPanel.getIsoLevel().valueProperty().addListener(observable -> updateMesh());
+        settingsPanel.getShapeSelector().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getTorusMajorRadius().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getTorusMinorRadius().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getSphereRadius().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getConeRadius().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getConeHeight().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getBoxWidth().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getBoxHeight().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getBoxDepth().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeTranslationX().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeTranslationY().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeTranslationZ().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeRotationX().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeRotationY().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeRotationZ().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeScaleX().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeScaleY().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getShapeScaleZ().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getAlgorithmSelector().valueProperty().addListener(_ -> updateMesh());
+        settingsPanel.getVoxelSize().valueProperty().addListener(_ -> updateVoxelGrid());
+        settingsPanel.getIsoLevel().valueProperty().addListener(_ -> updateMesh());
         settingsPanel.getSmoothShadingCheckbox().selectedProperty().addListener(
-                (observable, oldValue, newValue) -> {
+                (_, _, newValue) -> {
                     final ObservableIntegerArray meshFaceSmoothingGroups = ((TriangleMesh) modelViewer.getModel().getMesh()).getFaceSmoothingGroups();
                     final int smoothingValue = newValue ? 1 : 0;
 
@@ -65,9 +65,9 @@ public final class Main extends Application {
                 }
         );
         settingsPanel.getWireframeCheckbox().selectedProperty().addListener(
-                (observable, oldValue, newValue) -> modelViewer.setWireframe(newValue)
+                (_, _, newValue) -> modelViewer.setWireframe(newValue)
         );
-        settingsPanel.getDegenTriThresholdValue().valueProperty().addListener(observable -> updateNumDegenerateTriangles());
+        settingsPanel.getDegenTriThresholdValue().valueProperty().addListener(_ -> updateNumDegenerateTriangles());
 
         voxelGrid.voxelSizeProperty().bind(settingsPanel.getVoxelSize().valueProperty());
         modelViewer.setWireframe(settingsPanel.getWireframeCheckbox().isSelected());
