@@ -54,11 +54,8 @@ public final class Torus extends SdfShape {
 
     @Override
     public BoundingBox getLocalBounds() {
-        final double majorRadiusValue = majorRadius.get();
-        final double minorRadiusValue = minorRadius.get();
-
-        final double halfWidth = majorRadiusValue + minorRadiusValue;
-        final double halfHeight = minorRadiusValue;
+        final double halfHeight = minorRadius.get();
+        final double halfWidth = majorRadius.get() + halfHeight;
         final double width = halfWidth * 2.0;
         final double height = halfHeight * 2.0;
 
