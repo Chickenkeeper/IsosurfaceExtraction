@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.util.converter.NumberStringConverter;
 
 /**
@@ -26,7 +25,6 @@ public final class NumberField extends TextField {
     private double prevValue;
     private double mouseAnchor;
     private boolean wasDragged;
-    private boolean smallIncrement;
 
     /**
      * Creates a new {@code NumberField} node from a specified minimum,
@@ -45,13 +43,12 @@ public final class NumberField extends TextField {
         this.prevValue = 0.0;
         this.mouseAnchor = 0.0;
         this.wasDragged = false;
-        this.smallIncrement = false;
 
         this.value.addListener(_ -> setTextFromValue());
 
         setOnMouseDragged(e -> {
             if (!isEditable()) {
-                final double inc = smallIncrement ? increment * 0.1 : increment; // use a smaller increment if shift is held
+                final double inc = e.isShiftDown() ? increment * 0.1 : increment; // use a smaller increment if shift is held
                 double newValue = prevValue + (e.getX() - mouseAnchor) * inc;
                 newValue = Math.clamp(newValue, min, max);
 
@@ -86,15 +83,15 @@ public final class NumberField extends TextField {
         setOnMouseEntered(_ -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
         setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
         setOnAction(_ -> setValueFromText()); // commit an entered value when enter(?) is pressed
-        setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.SHIFT)) {
-                smallIncrement = true;
-            }
-        });
-        setOnKeyReleased(e -> {
-            if (e.getCode().equals(KeyCode.SHIFT)) {
-                smallIncrement = false;
-            }
+        setOnScroll(e ->  {
+            final boolean shiftIsDown = e.isShiftDown();
+            final double inc = shiftIsDown ? increment * 0.1 : increment; // use a smaller increment if shift is held
+            double deltaScroll = shiftIsDown ? e.getDeltaX() : e.getDeltaY(); // scroll axes are swapped when shift is held
+            double deltaValue = deltaScroll > 0 ? inc : -inc;
+            final double newValue = Math.clamp(this.value.get() + deltaValue, min, max);
+
+            this.value.set(newValue);
+            setTextFromValue();
         });
 
         focusedProperty().addListener((_, _, newValue) -> {

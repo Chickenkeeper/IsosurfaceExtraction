@@ -3,11 +3,7 @@ package org.openjfx.isosurface.ui;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.HPos;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.openjfx.isosurface.sdf.*;
 import org.openjfx.isosurface.suface.Blocky;
@@ -85,6 +81,16 @@ public final class SettingsPanel {
             }
         });
         shapeSelector.setButtonCell(shapeSelector.getCellFactory().call(null));
+        shapeSelector.setOnScroll(e -> {
+            final SelectionModel<SdfShape> shapeSelectionModel = shapeSelector.getSelectionModel();
+            final int numItems = shapeSelector.getItems().size();
+            final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
+            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
+            final int currSelectedIndex = shapeSelectionModel.getSelectedIndex();
+            final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
+
+            shapeSelectionModel.select(newSelectedIndex);
+        });
 
         torusMajorRadius = new NumberField(0.0, Double.MAX_VALUE, Torus.DEFAULT_MAJOR_RADIUS);
         torusMajorRadius.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(torusShape));
@@ -163,6 +169,16 @@ public final class SettingsPanel {
             }
         });
         algorithmSelector.setButtonCell(algorithmSelector.getCellFactory().call(null));
+        algorithmSelector.setOnScroll(e -> {
+            final SelectionModel<SdfMeshBuilder> algorithmSelectionModel = algorithmSelector.getSelectionModel();
+            final int numItems = algorithmSelector.getItems().size();
+            final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
+            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
+            final int currSelectedIndex = algorithmSelectionModel.getSelectedIndex();
+            final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
+
+            algorithmSelectionModel.select(newSelectedIndex);
+        });
 
         voxelSize = new NumberField(0.025, 0.25, 0.1, 0.005, "0.000");
         algorithmSelector.maxWidthProperty().bind(voxelSize.widthProperty());
