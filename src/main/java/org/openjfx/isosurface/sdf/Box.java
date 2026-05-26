@@ -107,7 +107,7 @@ public final class Box extends SdfShape {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Box";
     }
 }

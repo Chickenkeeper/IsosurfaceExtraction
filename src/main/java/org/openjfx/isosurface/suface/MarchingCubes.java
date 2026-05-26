@@ -453,7 +453,7 @@ public class MarchingCubes extends SdfMeshBuilder {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Marching Cubes";
     }
 }

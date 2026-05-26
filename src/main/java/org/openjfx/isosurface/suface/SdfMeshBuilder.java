@@ -136,6 +136,9 @@ public abstract class SdfMeshBuilder {
      */
     public abstract void buildMesh(VoxelGrid voxelGrid, float isoLevel, boolean smoothShading, TriangleMesh mesh);
 
-    @Override
-    public abstract String toString();
+    /**
+     * Returns the name of the overriding class in a
+     * human-readable form, to be displayed in the UI.
+     */
+    public abstract String getDisplayString();
 }

@@ -74,7 +74,7 @@ public final class Blocky extends SdfMeshBuilder {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Blocky";
     }
 }

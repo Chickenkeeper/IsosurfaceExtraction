@@ -67,7 +67,7 @@ public final class Sphere extends SdfShape {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Sphere";
     }
 }

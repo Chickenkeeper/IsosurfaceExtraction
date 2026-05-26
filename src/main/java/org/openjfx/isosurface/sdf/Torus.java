@@ -87,7 +87,7 @@ public final class Torus extends SdfShape {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Torus";
     }
 }

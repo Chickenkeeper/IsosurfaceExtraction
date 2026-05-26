@@ -6,6 +6,7 @@ import javafx.geometry.HPos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.*;
 import org.openjfx.isosurface.sdf.*;
@@ -73,6 +74,17 @@ public final class SettingsPanel {
         shapeSelector = new ComboBox<>();
         shapeSelector.getItems().setAll(torusShape, sphereShape, coneShape, boxShape);
         shapeSelector.setValue(shapeSelector.getItems().getFirst());
+        shapeSelector.setCellFactory(_ -> new ListCell<>() {
+            @Override
+            protected void updateItem(SdfShape item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null && !empty) {
+                    setText(item.getDisplayString());
+                }
+            }
+        });
+        shapeSelector.setButtonCell(shapeSelector.getCellFactory().call(null));
 
         torusMajorRadius = new NumberField(0.0, Double.MAX_VALUE, Torus.DEFAULT_MAJOR_RADIUS);
         torusMajorRadius.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(torusShape));
@@ -140,6 +152,17 @@ public final class SettingsPanel {
         algorithmSelector = new ComboBox<>();
         algorithmSelector.getItems().setAll(surfaceNetsMeshBuilder, marchingCubesMeshBuilder, blockyMeshBuilder);
         algorithmSelector.setValue(algorithmSelector.getItems().getFirst());
+        algorithmSelector.setCellFactory(_ -> new ListCell<>() {
+            @Override
+            protected void updateItem(SdfMeshBuilder item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null && !empty) {
+                    setText(item.getDisplayString());
+                }
+            }
+        });
+        algorithmSelector.setButtonCell(algorithmSelector.getCellFactory().call(null));
 
         voxelSize = new NumberField(0.025, 0.25, 0.1, 0.005, "0.000");
         algorithmSelector.maxWidthProperty().bind(voxelSize.widthProperty());

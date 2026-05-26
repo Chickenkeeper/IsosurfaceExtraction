@@ -158,7 +158,7 @@ public class SurfaceNets extends SdfMeshBuilder {
     }
 
     @Override
-    public String toString() {
+    public String getDisplayString() {
         return "Surface Nets";
     }
 }
