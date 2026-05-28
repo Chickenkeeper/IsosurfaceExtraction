@@ -9,20 +9,36 @@ import javafx.util.converter.NumberStringConverter;
 
 /**
  * A text input field that allows a user to enter and retrieve a number, displayed with a specified format.
- * The value can be changed by dragging the value or by clicking the field and typing it in like a {@code TextField}.
- * If a value cannot be parsed the number field will revert to the previously stored value.
+ * <p>
+ * The value can be changed by clicking and dragging on the field, or by clicking
+ * the field and typing in a value as with a {@code TextField}. If an entered
+ * value can't be parsed, the number field will revert to its previous value.
  */
 public final class NumberField extends TextField {
+    // default parameters
     private static final double DEFAULT_MIN = -Double.MAX_VALUE;
     private static final double DEFAULT_MAX = Double.MAX_VALUE;
     private static final double DEFAULT_VALUE = 0.0;
     private static final double DEFAULT_INCREMENT = 0.01;
-    private static final String DEFAULT_PATTERN = "0.0####";
+    private static final String DEFAULT_FORMAT_PATTERN = "0.0####";
 
+    // how much to change the number of increments per step.
+    // the number of 'normal' increments stored is multiplied by 10 to allow for smaller
+    // increments when holding the shift key down, while still reducing numerical error
+    private static final long NUM_INCREMENTS_DELTA_SMALL = 1;
+    private static final long NUM_INCREMENTS_DELTA_NORMAL = 10;
+
+    // instance parameters
+    private final double min;
+    private final double max;
     private final DoubleProperty value;
-    private final NumberStringConverter converter;
+    private final double increment;
+    private final NumberStringConverter formatConverter;
 
-    private double prevValue;
+    // variables used for calculating changes
+    private long numIncrements;
+    private long prevNumIncrements;
+    private double inputValue;
     private double mouseAnchorX;
     private double mouseAnchorY;
 
@@ -33,37 +49,46 @@ public final class NumberField extends TextField {
      * @param min           the minimum value
      * @param max           the maximum value
      * @param value         the starting value
-     * @param increment     the amount to change the value while dragging
+     * @param increment     the amount to change the value per step while dragging or scrolling
      * @param formatPattern the format of the displayed value
      */
     public NumberField(double min, double max, double value, double increment, String formatPattern) {
         super();
+
+        this.min = min;
+        this.max = max;
         this.value = new SimpleDoubleProperty(value);
-        this.converter = new NumberStringConverter(formatPattern);
-        this.prevValue = 0.0;
+        this.increment = increment;
+        this.formatConverter = new NumberStringConverter(formatPattern);
+
+        this.numIncrements = 0;
+        this.prevNumIncrements = 0;
+        this.inputValue = value;
         this.mouseAnchorX = 0.0;
         this.mouseAnchorY = 0.0;
 
-        this.value.addListener(_ -> setTextFromValue());
-
+        focusedProperty().addListener((_, _, newValue) -> {
+            if (!newValue) {
+                setValueFromText(); // commit an entered value if focus is lost
+            }
+        });
+        setOnAction(_ -> setValueFromText()); // commit an entered value when the enter key's pressed
         setOnMouseDragged(e -> {
             if (!isEditable()) {
-                final double inc = e.isShiftDown() ? increment * 0.1 : increment; // use a smaller increment if shift is held
-                double newValue = prevValue + (e.getX() - mouseAnchorX) * inc;
-                newValue = Math.clamp(newValue, min, max);
+                final long mouseDeltaX = (long) (e.getX() - mouseAnchorX);
+                final long numIncrementsDelta = e.isShiftDown() ? NUM_INCREMENTS_DELTA_SMALL : NUM_INCREMENTS_DELTA_NORMAL;
 
-                // don't fire events if the numerical value hasn't changed
-                if (newValue != this.value.get()) {
-                    this.value.set(newValue);
-                }
-
+                numIncrements = prevNumIncrements + (mouseDeltaX * numIncrementsDelta);
+                updateDisplayValue();
                 deselect(); // prevent stray selections while dragging
             }
         });
+        setOnMouseEntered(_ -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
+        setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
         setOnMousePressed(e -> {
             if (!isEditable()) {
                 // prepare for dragging mode
-                prevValue = this.value.get();
+                prevNumIncrements = numIncrements;
                 mouseAnchorX = e.getX();
                 mouseAnchorY = e.getY();
             }
@@ -76,27 +101,18 @@ public final class NumberField extends TextField {
                 setCursor(Cursor.TEXT);
             }
         });
-        setOnMouseEntered(_ -> setCursor(isEditable() ? Cursor.TEXT : Cursor.H_RESIZE));
-        setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
-        setOnAction(_ -> setValueFromText()); // commit an entered value when enter(?) is pressed
         setOnScroll(e -> {
             final boolean shiftIsDown = e.isShiftDown();
-            final double inc = shiftIsDown ? increment * 0.1 : increment; // use a smaller increment if shift is held
-            double deltaScroll = shiftIsDown ? e.getDeltaX() : e.getDeltaY(); // scroll axes are swapped when shift is held
-            double deltaValue = deltaScroll > 0 ? inc : -inc;
-            final double newValue = Math.clamp(this.value.get() + deltaValue, min, max);
+            final double scrollDelta = shiftIsDown ? e.getDeltaX() : e.getDeltaY(); // scroll axes are swapped when shift is held
+            final long numIncrementsDelta = shiftIsDown ? NUM_INCREMENTS_DELTA_SMALL : NUM_INCREMENTS_DELTA_NORMAL;
 
-            this.value.set(newValue);
-            setTextFromValue();
-        });
-
-        focusedProperty().addListener((_, _, newValue) -> {
-            if (!newValue) setValueFromText(); // commit an entered value if focus is lost
+            numIncrements += scrollDelta > 0 ? numIncrementsDelta : -numIncrementsDelta;
+            updateDisplayValue();
         });
 
         setAlignment(Pos.CENTER);
         setEditable(false);
-        setTextFromValue();
+        setText(formatConverter.toString(value));
     }
 
     /**
@@ -108,14 +124,14 @@ public final class NumberField extends TextField {
      * @param value the starting value
      */
     public NumberField(double min, double max, double value) {
-        this(min, max, value, DEFAULT_INCREMENT, DEFAULT_PATTERN);
+        this(min, max, value, DEFAULT_INCREMENT, DEFAULT_FORMAT_PATTERN);
     }
 
     /**
      * Creates a new {@code NumberField} node with default parameters.
      */
     public NumberField() {
-        this(DEFAULT_MIN, DEFAULT_MAX, DEFAULT_VALUE, DEFAULT_INCREMENT, DEFAULT_PATTERN);
+        this(DEFAULT_MIN, DEFAULT_MAX, DEFAULT_VALUE, DEFAULT_INCREMENT, DEFAULT_FORMAT_PATTERN);
     }
 
     /**
@@ -128,12 +144,28 @@ public final class NumberField extends TextField {
     }
 
     /**
-     * Sets the displayed text of this number field from its numerical value.
+     * Computes and sets the value of this number field.
      */
-    private void setTextFromValue() {
-        final String valueString = converter.toString(value.get());
+    private void updateDisplayValue() {
+        double newValue = ((double) numIncrements / (double) NUM_INCREMENTS_DELTA_NORMAL * increment) + inputValue;
 
-        setText(valueString);
+        // don't trigger events if the numerical value hasn't changed
+        if (value.get() == newValue) {
+            return;
+        }
+
+        if (newValue > max) {
+            numIncrements = 0;
+            inputValue = max;
+            newValue = max;
+        } else if (newValue < min) {
+            numIncrements = 0;
+            inputValue = min;
+            newValue = min;
+        }
+
+        value.set(newValue);
+        setText(formatConverter.toString(value.get()));
     }
 
     /**
@@ -142,14 +174,17 @@ public final class NumberField extends TextField {
      */
     private void setValueFromText() {
         try {
-            value.setValue(Double.valueOf(getText()));
-        } catch (NumberFormatException e) {
-            setTextFromValue();
-        }
+            inputValue = Double.parseDouble(getText());
+            numIncrements = 0;
+        } catch (NumberFormatException _) {
+            // ignore exceptions, just revert the text instead
+        } finally {
+            updateDisplayValue();
 
-        // exit editing mode
-        setEditable(false);
-        deselect();
-        setCursor(Cursor.H_RESIZE);
+            // exit editing mode
+            setEditable(false);
+            deselect();
+            setCursor(Cursor.H_RESIZE);
+        }
     }
 }
