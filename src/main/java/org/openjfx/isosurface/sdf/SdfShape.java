@@ -4,12 +4,13 @@ import javafx.beans.property.DoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.*;
+import org.openjfx.isosurface.util.Named;
 
 /**
  * The base class for 3D shapes represented by signed distance fields.
  * It provides functionality for transforming the shapes and their bounding boxes.
  */
-public abstract class SdfShape {
+public abstract class SdfShape implements Named {
     private final Scale scale;
     private final Rotate rotationX;
     private final Rotate rotationY;
@@ -290,10 +291,4 @@ public abstract class SdfShape {
     public double getWorldDistance(Point3D point) {
         return getLocalDistance(worldToLocalPoint(point));
     }
-
-    /**
-     * Returns the name of the overriding class in a
-     * human-readable form, to be displayed in the UI.
-     */
-    public abstract String getDisplayString();
 }

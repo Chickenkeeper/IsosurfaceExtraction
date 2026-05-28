@@ -3,13 +3,14 @@ package org.openjfx.isosurface.suface;
 import javafx.scene.shape.TriangleMesh;
 import org.openjfx.isosurface.VoxelGrid;
 import org.openjfx.isosurface.util.Float3;
+import org.openjfx.isosurface.util.Named;
 
 import java.util.HashMap;
 
 /**
  * The base class for objects that build triangle meshes that represent the surface of 3D scalar fields.
  */
-public abstract class SdfMeshBuilder {
+public abstract class SdfMeshBuilder implements Named {
     /**
      * Uses linear interpolation to compute the approximate point
      * at which an edge intersects the surface of a scalar field.
@@ -135,10 +136,4 @@ public abstract class SdfMeshBuilder {
      * @param mesh          the destination for the mesh data
      */
     public abstract void buildMesh(VoxelGrid voxelGrid, float isoLevel, boolean smoothShading, TriangleMesh mesh);
-
-    /**
-     * Returns the name of the overriding class in a
-     * human-readable form, to be displayed in the UI.
-     */
-    public abstract String getDisplayString();
 }

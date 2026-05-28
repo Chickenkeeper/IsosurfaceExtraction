@@ -10,6 +10,7 @@ import org.openjfx.isosurface.suface.Blocky;
 import org.openjfx.isosurface.suface.MarchingCubes;
 import org.openjfx.isosurface.suface.SdfMeshBuilder;
 import org.openjfx.isosurface.suface.SurfaceNets;
+import org.openjfx.isosurface.util.Named;
 
 /**
  * The main settings panel for this application.
@@ -67,30 +68,9 @@ public final class SettingsPanel {
         coneShape = new Cone();
         boxShape = new Box();
 
-        shapeSelector = new ComboBox<>();
+        shapeSelector = makeScrollableComboBox();
         shapeSelector.getItems().setAll(torusShape, sphereShape, coneShape, boxShape);
         shapeSelector.setValue(shapeSelector.getItems().getFirst());
-        shapeSelector.setCellFactory(_ -> new ListCell<>() {
-            @Override
-            protected void updateItem(SdfShape item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item != null && !empty) {
-                    setText(item.getDisplayString());
-                }
-            }
-        });
-        shapeSelector.setButtonCell(shapeSelector.getCellFactory().call(null));
-        shapeSelector.setOnScroll(e -> {
-            final SelectionModel<SdfShape> shapeSelectionModel = shapeSelector.getSelectionModel();
-            final int numItems = shapeSelector.getItems().size();
-            final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
-            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
-            final int currSelectedIndex = shapeSelectionModel.getSelectedIndex();
-            final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
-
-            shapeSelectionModel.select(newSelectedIndex);
-        });
 
         torusMajorRadius = new NumberField(0.0, Double.MAX_VALUE, Torus.DEFAULT_MAJOR_RADIUS);
         torusMajorRadius.visibleProperty().bind(shapeSelector.valueProperty().isEqualTo(torusShape));
@@ -155,30 +135,9 @@ public final class SettingsPanel {
         final SdfMeshBuilder marchingCubesMeshBuilder = new MarchingCubes();
         final SdfMeshBuilder blockyMeshBuilder = new Blocky();
 
-        algorithmSelector = new ComboBox<>();
+        algorithmSelector = makeScrollableComboBox();
         algorithmSelector.getItems().setAll(surfaceNetsMeshBuilder, marchingCubesMeshBuilder, blockyMeshBuilder);
         algorithmSelector.setValue(algorithmSelector.getItems().getFirst());
-        algorithmSelector.setCellFactory(_ -> new ListCell<>() {
-            @Override
-            protected void updateItem(SdfMeshBuilder item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item != null && !empty) {
-                    setText(item.getDisplayString());
-                }
-            }
-        });
-        algorithmSelector.setButtonCell(algorithmSelector.getCellFactory().call(null));
-        algorithmSelector.setOnScroll(e -> {
-            final SelectionModel<SdfMeshBuilder> algorithmSelectionModel = algorithmSelector.getSelectionModel();
-            final int numItems = algorithmSelector.getItems().size();
-            final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
-            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
-            final int currSelectedIndex = algorithmSelectionModel.getSelectedIndex();
-            final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
-
-            algorithmSelectionModel.select(newSelectedIndex);
-        });
 
         voxelSize = new NumberField(0.025, 0.25, 0.1, 0.005, "0.000");
         algorithmSelector.maxWidthProperty().bind(voxelSize.widthProperty());
@@ -720,5 +679,41 @@ public final class SettingsPanel {
      */
     public void setSurfaceGenerationTimeValue(double timeMs) {
         surfaceGenerationTimeValueLabel.setText(String.format("%.4fms", timeMs));
+    }
+
+    /**
+     * Creates a combo box whose selection can be scrolled with a mouse. If the beginning
+     * or end of the list of items is reached, it will wrap around to the other end.
+     *
+     * @param <T> the type of item to store in the combo box. Note that the type must extend
+     *            the Named interface so the combo box can display a proper label for it
+     * @return the scrollable combo box
+     */
+    private static <T extends Named> ComboBox<T> makeScrollableComboBox() {
+        final ComboBox<T> comboBox = new ComboBox<>();
+
+        comboBox.setCellFactory(_ -> new ListCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item != null && !empty) {
+                    setText(item.getDisplayString());
+                }
+            }
+        });
+        comboBox.setButtonCell(comboBox.getCellFactory().call(null));
+        comboBox.setOnScroll(e -> {
+            final SelectionModel<T> shapeSelectionModel = comboBox.getSelectionModel();
+            final int numItems = comboBox.getItems().size();
+            final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
+            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
+            final int currSelectedIndex = shapeSelectionModel.getSelectedIndex();
+            final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
+
+            shapeSelectionModel.select(newSelectedIndex);
+        });
+
+        return comboBox;
     }
 }
