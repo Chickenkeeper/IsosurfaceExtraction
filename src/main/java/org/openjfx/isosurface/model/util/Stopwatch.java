@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.util;
+package org.openjfx.isosurface.model.util;
 
 /**
  * Measures elapsed time. Primarily used for recording the speed of expensive operations.

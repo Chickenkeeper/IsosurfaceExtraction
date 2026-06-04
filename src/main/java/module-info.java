@@ -5,8 +5,9 @@ module IsosurfaceExtraction.main {
     requires javafx.graphics;
 
     exports org.openjfx.isosurface;
-    exports org.openjfx.isosurface.sdf;
-    exports org.openjfx.isosurface.suface;
-    exports org.openjfx.isosurface.ui;
-    exports org.openjfx.isosurface.util;
+    exports org.openjfx.isosurface.model.sdf;
+    exports org.openjfx.isosurface.model.suface;
+    exports org.openjfx.isosurface.model.util;
+    exports org.openjfx.isosurface.view;
+    exports org.openjfx.isosurface.viewmodel;
 }

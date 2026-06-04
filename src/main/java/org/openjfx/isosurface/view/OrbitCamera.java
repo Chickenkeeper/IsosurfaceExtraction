@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.ui;
+package org.openjfx.isosurface.view;
 
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;

@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.ui;
+package org.openjfx.isosurface.view;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -41,6 +41,7 @@ public final class NumberField extends TextField {
     private double inputValue;
     private double mouseAnchorX;
     private double mouseAnchorY;
+    private boolean valueUpdatedInternally; // needed for bidirectional binding support
 
     /**
      * Creates a new {@code NumberField} node from a specified minimum,
@@ -66,7 +67,16 @@ public final class NumberField extends TextField {
         this.inputValue = value;
         this.mouseAnchorX = 0.0;
         this.mouseAnchorY = 0.0;
+        this.valueUpdatedInternally = false;
 
+        this.value.addListener((_, _, newValue) -> {
+            if (!valueUpdatedInternally) {
+                numIncrements = 0;
+                inputValue = newValue.doubleValue();
+            } else {
+                valueUpdatedInternally = false;
+            }
+        });
         focusedProperty().addListener((_, _, newValue) -> {
             if (!newValue) {
                 setValueFromText(); // commit an entered value if focus is lost
@@ -79,6 +89,7 @@ public final class NumberField extends TextField {
                 final long numIncrementsDelta = e.isShiftDown() ? NUM_INCREMENTS_DELTA_SMALL : NUM_INCREMENTS_DELTA_NORMAL;
 
                 numIncrements = prevNumIncrements + (mouseDeltaX * numIncrementsDelta);
+                valueUpdatedInternally = true;
                 updateDisplayValue();
                 deselect(); // prevent stray selections while dragging
             }
@@ -107,6 +118,7 @@ public final class NumberField extends TextField {
             final long numIncrementsDelta = shiftIsDown ? NUM_INCREMENTS_DELTA_SMALL : NUM_INCREMENTS_DELTA_NORMAL;
 
             numIncrements += scrollDelta > 0 ? numIncrementsDelta : -numIncrementsDelta;
+            valueUpdatedInternally = true;
             updateDisplayValue();
         });
 

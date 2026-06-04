@@ -1,15 +1,23 @@
-package org.openjfx.isosurface.ui;
+package org.openjfx.isosurface.view;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ObservableIntegerArray;
 import javafx.scene.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.*;
+import javafx.scene.shape.CullFace;
+import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
+import org.openjfx.isosurface.viewmodel.ApplicationViewModel;
 
 /**
  * Displays a 3D model. It includes an orbit camera so the user can see the model at different angles and distances.
  */
-public final class ModelViewer {
+public final class ModelViewerView extends Pane {
     private static final double DEFAULT_WINDOW_WIDTH = 800;
     private static final double DEFAULT_WINDOW_HEIGHT = 600;
     private static final SceneAntialiasing DEFAULT_ANTIALIASING = SceneAntialiasing.BALANCED;
@@ -22,7 +30,6 @@ public final class ModelViewer {
     private final DirectionalLight directionalLight;
     private final MeshView model;
     private final OrbitCamera camera;
-    private final SubScene root;
 
     private double mousePosXCurr;
     private double mousePosYCurr;
@@ -30,22 +37,17 @@ public final class ModelViewer {
     private double mousePosYPrev;
 
     /**
-     * Creates a new {@code ModelViewer} with a specified scene width, height and antialiasing mode.
-     *
-     * @param width        the width of the model viewer scene
-     * @param height       the height of the model viewer scene
-     * @param antialiasing the type of antialiasing to use
+     * Creates a new {@code ModelViewer} with a default scene width, height and antialiasing mode.
      */
-    public ModelViewer(double width, double height, SceneAntialiasing antialiasing) {
-        TriangleMesh mesh = new TriangleMesh(VertexFormat.POINT_TEXCOORD);
-        mesh.getTexCoords().addAll(0.0f, 0.0f); // the mesh isn't textured so it can be initialized with default texture coords
+    public ModelViewerView(ApplicationViewModel applicationViewModel) {
+        super();
 
         final PhongMaterial modelMaterial = new PhongMaterial(Color.WHITE);
         modelMaterial.setSpecularPower(8.0);
         modelMaterial.setSpecularColor(new Color(0.1, 0.1, 0.1, 1.0));
 
         model = new MeshView();
-        model.setMesh(mesh);
+        model.setMesh(applicationViewModel.getMesh());
         model.setMaterial(modelMaterial);
         model.setCullFace(CullFace.BACK);
 
@@ -61,15 +63,14 @@ public final class ModelViewer {
         );
 
         final Group subSceneRoot = new Group(camera.getCamera(), model, ambientLight, directionalLight);
-
-        root = new SubScene(subSceneRoot, width, height, true, antialiasing);
+        final SubScene root = new SubScene(subSceneRoot, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, true, DEFAULT_ANTIALIASING);
         root.setFill(Color.BLACK);
         root.setCamera(camera.getCamera());
         root.setOnMousePressed(event -> {
             mousePosXCurr = event.getSceneX();
             mousePosYCurr = event.getSceneY();
-            mousePosXPrev = event.getSceneX();
-            mousePosYPrev = event.getSceneY();
+            mousePosXPrev = mousePosXCurr;
+            mousePosYPrev = mousePosYCurr;
         });
         root.setOnMouseDragged(event -> {
             mousePosXPrev = mousePosXCurr;
@@ -93,40 +94,22 @@ public final class ModelViewer {
                 camera.incrementZoom();
             }
         });
-    }
 
-    /**
-     * Creates a new {@code ModelViewer} with a default scene width, height and antialiasing mode.
-     */
-    public ModelViewer() {
-        this(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_ANTIALIASING);
-    }
+        getChildren().add(root);
+        root.widthProperty().bind(widthProperty());
+        root.heightProperty().bind(heightProperty());
+        camera.getCamera().verticalFieldOfViewProperty().bind(root.widthProperty().greaterThan(root.heightProperty()));
 
-    /**
-     * Returns the 3D model being rendered by this model viewer.
-     *
-     * @return the 3D model being rendered by this model viewer
-     */
-    public MeshView getModel() {
-        return model;
-    }
+        final BooleanProperty drawWireframe = new SimpleBooleanProperty(applicationViewModel.isDrawWireframe());
+        drawWireframe.bindBidirectional(applicationViewModel.drawWireframeProperty());
+        drawWireframe.addListener((_, _, newValue) -> setWireframe(newValue));
 
-    /**
-     * Returns the perspective camera being used by this model viewer.
-     *
-     * @return the perspective camera being used by this model viewer
-     */
-    public PerspectiveCamera getCamera() {
-        return camera.getCamera();
-    }
+        final BooleanProperty useSmoothShading = new SimpleBooleanProperty(applicationViewModel.isUseSmoothShading());
+        useSmoothShading.bindBidirectional(applicationViewModel.useSmoothShadingProperty());
+        useSmoothShading.addListener((_, _, newValue) -> setSmooth(newValue));
 
-    /**
-     * Returns the root node of this model viewer.
-     *
-     * @return the root node of this model viewer
-     */
-    public SubScene getRoot() {
-        return root;
+        setWireframe(drawWireframe.get());
+        setSmooth(useSmoothShading.get());
     }
 
     /**
@@ -134,7 +117,7 @@ public final class ModelViewer {
      *
      * @param wireframe whether the 3D model should be drawn as a wireframe
      */
-    public void setWireframe(boolean wireframe) {
+    private void setWireframe(boolean wireframe) {
         if (wireframe) {
             model.setDrawMode(DrawMode.LINE);
             ambientLight.setColor(AMBIENT_LIGHT_COLOUR_WIRE);
@@ -143,6 +126,21 @@ public final class ModelViewer {
             model.setDrawMode(DrawMode.FILL);
             ambientLight.setColor(AMBIENT_LIGHT_COLOUR_FILL);
             directionalLight.setColor(DIRECTIONAL_LIGHT_COLOUR_FILL);
+        }
+    }
+
+    /**
+     * Enables or disables smooth shading on the 3D model.
+     *
+     * @param isSmooth whether the surface of the model should be smooth
+     */
+    private void setSmooth(boolean isSmooth) {
+        final TriangleMesh mesh = (TriangleMesh) model.getMesh();
+        final ObservableIntegerArray meshFaceSmoothingGroups = mesh.getFaceSmoothingGroups();
+        final int smoothingValue = isSmooth ? 1 : 0;
+
+        for (int i = 0; i < meshFaceSmoothingGroups.size(); i++) {
+            meshFaceSmoothingGroups.set(i, smoothingValue);
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.util;
+package org.openjfx.isosurface.model.util;
 
 /**
  * Provides a method for giving a class a human-readable name for display in the UI.

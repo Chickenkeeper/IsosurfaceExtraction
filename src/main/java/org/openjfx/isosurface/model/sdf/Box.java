@@ -1,9 +1,11 @@
-package org.openjfx.isosurface.sdf;
+package org.openjfx.isosurface.model.sdf;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+
+import java.util.List;
 
 /**
  * A 3D box shape represented as a signed distance field.
@@ -104,6 +106,15 @@ public final class Box extends SdfShape {
         final double qMaxElem = Math.max(qX, Math.max(qY, qZ));
 
         return qClampLen + Math.min(qMaxElem, 0.0);
+    }
+
+    @Override
+    public List<ShapeParameter> getParameters() {
+        return List.of(
+                new ShapeParameter("Width", width, DEFAULT_WIDTH),
+                new ShapeParameter("Height", height, DEFAULT_DEPTH),
+                new ShapeParameter("Depth", depth, DEFAULT_HEIGHT)
+        );
     }
 
     @Override

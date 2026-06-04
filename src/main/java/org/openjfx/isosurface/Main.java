@@ -1,177 +1,59 @@
 package org.openjfx.isosurface;
 
 import javafx.application.Application;
-import javafx.collections.ObservableFloatArray;
-import javafx.collections.ObservableIntegerArray;
-import javafx.geometry.Point3D;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.openjfx.isosurface.sdf.SdfShape;
-import org.openjfx.isosurface.suface.SdfMeshBuilder;
-import org.openjfx.isosurface.ui.ModelViewer;
-import org.openjfx.isosurface.ui.SettingsPanel;
-import org.openjfx.isosurface.util.Stopwatch;
+import org.openjfx.isosurface.view.ModelViewerView;
+import org.openjfx.isosurface.view.ShapeSettingsPanelView;
+import org.openjfx.isosurface.view.StatisticsPanelView;
+import org.openjfx.isosurface.view.SurfaceSettingsPanelView;
+import org.openjfx.isosurface.viewmodel.ApplicationViewModel;
 
+/**
+ * The entry point of the application, responsible for creating and initializing the UI and underlying data structures.
+ */
 public final class Main extends Application {
-    private VoxelGrid voxelGrid;
-    private SettingsPanel settingsPanel;
-    private ModelViewer modelViewer;
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) {
-        voxelGrid = new VoxelGrid();
-        settingsPanel = new SettingsPanel();
-        modelViewer = new ModelViewer();
+        // create viewmodel
+        final ApplicationViewModel applicationViewModel = new ApplicationViewModel();
 
-        settingsPanel.getShapeSelector().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getTorusMajorRadius().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getTorusMinorRadius().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getSphereRadius().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getConeRadius().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getConeHeight().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getBoxWidth().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getBoxHeight().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getBoxDepth().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationX().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationY().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeTranslationZ().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeRotationX().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeRotationY().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeRotationZ().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeScaleX().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeScaleY().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getShapeScaleZ().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getAlgorithmSelector().valueProperty().addListener(_ -> updateMesh());
-        settingsPanel.getVoxelSize().valueProperty().addListener(_ -> updateVoxelGrid());
-        settingsPanel.getIsoLevel().valueProperty().addListener(_ -> updateMesh());
-        settingsPanel.getSmoothShadingCheckbox().selectedProperty().addListener(
-                (_, _, newValue) -> {
-                    final ObservableIntegerArray meshFaceSmoothingGroups = ((TriangleMesh) modelViewer.getModel().getMesh()).getFaceSmoothingGroups();
-                    final int smoothingValue = newValue ? 1 : 0;
+        // create views
+        final ShapeSettingsPanelView shapeSettingsPanelView = new ShapeSettingsPanelView(applicationViewModel);
+        final SurfaceSettingsPanelView surfaceSettingsPanelView = new SurfaceSettingsPanelView(applicationViewModel);
+        final StatisticsPanelView statisticsPanelView = new StatisticsPanelView(applicationViewModel);
+        final ModelViewerView modelViewerView = new ModelViewerView(applicationViewModel);
 
-                    for (int i = 0; i < meshFaceSmoothingGroups.size(); i++) {
-                        meshFaceSmoothingGroups.set(i, smoothingValue);
-                    }
-                }
+        // create left side settings panel
+        final VBox settingsPanelVBox = new VBox(
+                new TitledPane("Shape Settings", shapeSettingsPanelView),
+                new TitledPane("Surface Settings", surfaceSettingsPanelView),
+                new TitledPane("Statistics", statisticsPanelView)
         );
-        settingsPanel.getWireframeCheckbox().selectedProperty().addListener(
-                (_, _, newValue) -> modelViewer.setWireframe(newValue)
-        );
-        settingsPanel.getDegenTriThresholdValue().valueProperty().addListener(_ -> updateNumDegenerateTriangles());
+        final ScrollPane settingsPanelView = new ScrollPane(settingsPanelVBox);
+        settingsPanelView.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        settingsPanelView.setFitToWidth(true);
 
-        voxelGrid.voxelSizeProperty().bind(settingsPanel.getVoxelSize().valueProperty());
-        modelViewer.setWireframe(settingsPanel.getWireframeCheckbox().isSelected());
-
-        final ScrollPane settingsPanelScrollPane = new ScrollPane(settingsPanel.getRoot());
-        settingsPanelScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        settingsPanelScrollPane.setFitToWidth(true);
-
-        final PerspectiveCamera modelViewerCamera = modelViewer.getCamera();
-        final SubScene modelViewerRoot = modelViewer.getRoot();
-        final Pane modelViewerPane = new Pane(modelViewerRoot);
-
-        final SplitPane splitPane = new SplitPane(settingsPanelScrollPane, modelViewerPane);
+        // create main interface from settings panel and model viewer
+        final SplitPane splitPane = new SplitPane(settingsPanelView, modelViewerView);
+        SplitPane.setResizableWithParent(settingsPanelView, false);
         splitPane.setDividerPositions(0.25);
-        SplitPane.setResizableWithParent(settingsPanelScrollPane, false);
 
+        // create scene
         final Scene scene = new Scene(splitPane, 1200, 800);
         scene.getStylesheets().add("style.css");
 
-        modelViewerRoot.widthProperty().bind(modelViewerPane.widthProperty());
-        modelViewerRoot.heightProperty().bind(scene.heightProperty());
-        modelViewerCamera.verticalFieldOfViewProperty().bind(
-                modelViewerRoot.widthProperty().greaterThan(modelViewerRoot.heightProperty())
-        );
-
-        updateVoxelGrid();
-
+        // show stage
         stage.setTitle("Isosurface Extraction");
         stage.setScene(scene);
         stage.show();
-    }
-
-    /**
-     * Recalculates the number of degenerate triangles within the mesh displayed by the model viewer.
-     */
-    private void updateNumDegenerateTriangles() {
-        final TriangleMesh mesh = (TriangleMesh) modelViewer.getModel().getMesh();
-        final double voxelSize = voxelGrid.getVoxelSize();
-        final double degenTriThreshold = settingsPanel.getDegenTriThresholdValue().valueProperty().get();
-        final ObservableFloatArray points = mesh.getPoints();
-        final ObservableIntegerArray faces = mesh.getFaces();
-
-        int numDegenerateTriangles = 0;
-
-        for (int i = 0; i < faces.size(); i += 6) {
-            final int p0Index = faces.get(i) * 3;
-            final int p1Index = faces.get(i + 2) * 3;
-            final int p2Index = faces.get(i + 4) * 3;
-
-            final Point3D p0 = new Point3D(points.get(p0Index), points.get(p0Index + 1), points.get(p0Index + 2));
-            final Point3D p1 = new Point3D(points.get(p1Index), points.get(p1Index + 1), points.get(p1Index + 2));
-            final Point3D p2 = new Point3D(points.get(p2Index), points.get(p2Index + 1), points.get(p2Index + 2));
-
-            double length0 = p0.distance(p1);
-            double length1 = p1.distance(p2);
-            double length2 = p2.distance(p0);
-
-            double minEdgeLength = Math.min(Math.min(length0, length1), length2);
-
-            if (minEdgeLength <= voxelSize * degenTriThreshold) {
-                numDegenerateTriangles++;
-            }
-        }
-
-        settingsPanel.setDegenerateTrianglesValue(numDegenerateTriangles);
-    }
-
-    /**
-     * Refits the voxel grid to the current shape, converts it to a scalar field, then generates a surface mesh from it.
-     */
-    private void updateVoxelGrid() {
-        final SdfShape shape = settingsPanel.getShapeSelector().getValue();
-        final Stopwatch stopwatch = new Stopwatch();
-
-        voxelGrid.fitToShape(shape);
-
-        stopwatch.start();
-        voxelGrid.voxelizeShape(shape);
-        final double drawShapeDurationMs = stopwatch.getElapsedMillis();
-
-        settingsPanel.setVoxelizationTimeValue(drawShapeDurationMs);
-
-        updateMesh();
-    }
-
-    /**
-     * Regenerates the surface mesh from the voxel grid and updates the mesh statistics.
-     */
-    private void updateMesh() {
-        final SdfMeshBuilder meshBuilder = settingsPanel.getAlgorithmSelector().getValue();
-        final float isoLevel = (float) settingsPanel.getIsoLevel().valueProperty().get();
-        final boolean smoothNormals = settingsPanel.getSmoothShadingCheckbox().isSelected();
-        final TriangleMesh mesh = (TriangleMesh) modelViewer.getModel().getMesh();
-        final Stopwatch stopwatch = new Stopwatch();
-
-        stopwatch.start();
-        meshBuilder.buildMesh(voxelGrid, isoLevel, smoothNormals, mesh);
-        final double meshBuildDurationMs = stopwatch.getElapsedMillis();
-
-        final int numTriangles = mesh.getFaces().size() / 6;
-
-        settingsPanel.setTotalTrianglesValue(numTriangles);
-        settingsPanel.setSurfaceGenerationTimeValue(meshBuildDurationMs);
-
-        updateNumDegenerateTriangles();
     }
 }

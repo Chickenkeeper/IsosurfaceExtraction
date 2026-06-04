@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.util;
+package org.openjfx.isosurface.model.util;
 
 import javafx.geometry.Point3D;
 

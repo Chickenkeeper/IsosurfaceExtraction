@@ -12,6 +12,7 @@
 
 .settings-grid {
     -fx-hgap: 0.5em;
+    -fx-padding: 10;
 }
 
 .label, .text-field {

@@ -1,9 +1,11 @@
-package org.openjfx.isosurface.sdf;
+package org.openjfx.isosurface.model.sdf;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+
+import java.util.List;
 
 /**
  * A 3D cone shape represented as a signed distance field.
@@ -104,6 +106,14 @@ public final class Cone extends SdfShape {
         final double s = Math.max(k * (wX * qY - wY * qX), k * (wY - qY));
 
         return Math.sqrt(d) * Math.signum(s);
+    }
+
+    @Override
+    public List<ShapeParameter> getParameters() {
+        return List.of(
+                new ShapeParameter("Radius", radius, DEFAULT_RADIUS),
+                new ShapeParameter("Height", height, DEFAULT_HEIGHT)
+        );
     }
 
     @Override

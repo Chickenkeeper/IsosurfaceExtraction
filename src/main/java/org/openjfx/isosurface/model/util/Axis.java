@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.util;
+package org.openjfx.isosurface.model.util;
 
 /**
  * Represents an axis in 3D space.

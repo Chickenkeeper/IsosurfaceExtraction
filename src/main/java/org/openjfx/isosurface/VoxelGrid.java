@@ -3,9 +3,9 @@ package org.openjfx.isosurface;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.geometry.BoundingBox;
-import org.openjfx.isosurface.sdf.SdfShape;
-import org.openjfx.isosurface.util.Float3;
-import org.openjfx.isosurface.util.Int3;
+import org.openjfx.isosurface.model.sdf.SdfShape;
+import org.openjfx.isosurface.model.util.Float3;
+import org.openjfx.isosurface.model.util.Int3;
 
 /**
  * Stores a 3D scalar field from which surface meshes can be extracted with an {@code SdfMeshBuilder}.

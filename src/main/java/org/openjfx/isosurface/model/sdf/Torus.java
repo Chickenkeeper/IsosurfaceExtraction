@@ -1,9 +1,11 @@
-package org.openjfx.isosurface.sdf;
+package org.openjfx.isosurface.model.sdf;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+
+import java.util.List;
 
 /**
  * A 3D torus shape represented as a signed distance field.
@@ -81,6 +83,14 @@ public final class Torus extends SdfShape {
         final double q = Math.sqrt((pX * pX) + (pZ * pZ)) - majorRadiusValue;
 
         return Math.sqrt((q * q) + (pY * pY)) - minorRadiusValue;
+    }
+
+    @Override
+    public List<ShapeParameter> getParameters() {
+        return List.of(
+                new ShapeParameter("Major Radius", majorRadius, DEFAULT_MAJOR_RADIUS),
+                new ShapeParameter("Minor Radius", minorRadius, DEFAULT_MINOR_RADIUS)
+        );
     }
 
     @Override

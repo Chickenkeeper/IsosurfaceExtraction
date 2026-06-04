@@ -1,10 +1,12 @@
-package org.openjfx.isosurface.sdf;
+package org.openjfx.isosurface.model.sdf;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.*;
-import org.openjfx.isosurface.util.Named;
+import org.openjfx.isosurface.model.util.Named;
+
+import java.util.List;
 
 /**
  * The base class for 3D shapes represented by signed distance fields.
@@ -291,4 +293,11 @@ public abstract class SdfShape implements Named {
     public double getWorldDistance(Point3D point) {
         return getLocalDistance(worldToLocalPoint(point));
     }
+
+    /**
+     * Returns a list of all parameters of this shape.
+     *
+     * @return the parameters of this shape
+     */
+    public abstract List<ShapeParameter> getParameters();
 }

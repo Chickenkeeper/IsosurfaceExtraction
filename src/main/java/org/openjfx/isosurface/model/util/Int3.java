@@ -1,4 +1,4 @@
-package org.openjfx.isosurface.util;
+package org.openjfx.isosurface.model.util;
 
 /**
  * A group of 3 integers representing a 3D coordinate.

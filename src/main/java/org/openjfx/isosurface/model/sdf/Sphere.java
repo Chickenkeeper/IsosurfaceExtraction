@@ -1,9 +1,11 @@
-package org.openjfx.isosurface.sdf;
+package org.openjfx.isosurface.model.sdf;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+
+import java.util.List;
 
 /**
  * A 3D sphere shape represented as a signed distance field.
@@ -64,6 +66,11 @@ public final class Sphere extends SdfShape {
         final double pZ = point.getZ();
 
         return Math.sqrt((pX * pX) + (pY * pY) + (pZ * pZ)) - radiusValue;
+    }
+
+    @Override
+    public List<ShapeParameter> getParameters() {
+        return List.of(new ShapeParameter("Radius", radius, DEFAULT_RADIUS));
     }
 
     @Override
