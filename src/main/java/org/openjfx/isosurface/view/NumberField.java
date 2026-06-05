@@ -44,7 +44,7 @@ public final class NumberField extends TextField {
     private boolean valueUpdatedInternally; // needed for bidirectional binding support
 
     /**
-     * Creates a new {@code NumberField} node from a specified minimum,
+     * Constructs a new {@code NumberField} node from a specified minimum,
      * maximum, starting and increment value, and a format pattern.
      *
      * @param min           the minimum value
@@ -128,7 +128,7 @@ public final class NumberField extends TextField {
     }
 
     /**
-     * Creates a new {@code NumberField} node from a specified minimum, maximum
+     * Constructs a new {@code NumberField} node from a specified minimum, maximum
      * and starting value, with a default increment and format pattern.
      *
      * @param min   the minimum value
@@ -140,14 +140,14 @@ public final class NumberField extends TextField {
     }
 
     /**
-     * Creates a new {@code NumberField} node with default parameters.
+     * Constructs a new {@code NumberField} node with default parameters.
      */
     public NumberField() {
         this(DEFAULT_MIN, DEFAULT_MAX, DEFAULT_VALUE, DEFAULT_INCREMENT, DEFAULT_FORMAT_PATTERN);
     }
 
     /**
-     * Returns the property containing the numerical value of this number field.
+     * Gets the property containing the numerical value of this number field.
      *
      * @return the numerical value of this number field
      */

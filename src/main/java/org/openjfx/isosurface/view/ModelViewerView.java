@@ -37,7 +37,7 @@ public final class ModelViewerView extends Pane {
     private double mousePosYPrev;
 
     /**
-     * Creates a new {@code ModelViewer} with a default scene width, height and antialiasing mode.
+     * Constructs a new {@code ModelViewer} with a default scene width, height and antialiasing mode.
      */
     public ModelViewerView(ApplicationViewModel applicationViewModel) {
         super();
@@ -113,7 +113,7 @@ public final class ModelViewerView extends Pane {
     }
 
     /**
-     * Sets whether the 3D model should be drawn as a wireframe.
+     * Specifies whether the 3D model should be drawn as a wireframe.
      *
      * @param wireframe whether the 3D model should be drawn as a wireframe
      */

@@ -24,7 +24,7 @@ public final class VoxelGrid {
     private float[] voxels;
 
     /**
-     * Creates a new empty {@code VoxelGrid}.
+     * Constructs a new empty {@code VoxelGrid}.
      */
     public VoxelGrid() {
         this.posX = 0;
@@ -38,7 +38,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the number of voxels contained by this voxel grid along the x-axis.
+     * Gets the number of voxels contained by this voxel grid along the x-axis.
      *
      * @return the number of voxels along the x-axis
      */
@@ -47,7 +47,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the number of voxels contained by this voxel grid along the y-axis.
+     * Gets the number of voxels contained by this voxel grid along the y-axis.
      *
      * @return the number of voxels along the y-axis
      */
@@ -56,7 +56,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the number of voxels contained by this voxel grid along the z-axis.
+     * Gets the number of voxels contained by this voxel grid along the z-axis.
      *
      * @return the number of voxels along the z-axis
      */
@@ -65,7 +65,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the actual size of each voxel in world space.
+     * Gets the actual size of each voxel in world space.
      *
      * @return the size of each voxel
      */
@@ -74,7 +74,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the property defining the size of each voxel in world space
+     * Gets the property defining the size of each voxel in world space
      *
      * @return the property defining the size of each voxel
      */
@@ -109,8 +109,8 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the value stored at the specified voxel coordinate,
-     * or a large default value if the coordinate is out of bounds.
+     * Gets the value stored at the specified voxel coordinate, or
+     * a large default value if the coordinate is out of bounds.
      *
      * @param x the x coordinate of the voxel
      * @param y the y coordinate of the voxel
@@ -126,8 +126,8 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the value stored at the specified voxel coordinate,
-     * or a large default value if the coordinate is out of bounds.
+     * Gets the value stored at the specified voxel coordinate, or
+     * a large default value if the coordinate is out of bounds.
      *
      * @param coords the coordinates of the voxel
      * @return the value stored at the specified coordinate, or a large default value if the coordinate is out of bounds
@@ -199,7 +199,7 @@ public final class VoxelGrid {
     }
 
     /**
-     * Returns the nearest power of 2 to the specified integer.
+     * Calculates the nearest power of 2 to the specified integer.
      *
      * @param x the input integer
      * @return the nearest power of 2 to the input integer

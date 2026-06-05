@@ -5,7 +5,9 @@ package org.openjfx.isosurface.model.util;
  */
 public interface Named {
     /**
-     * Returns the name of the implementing class in a human-readable form.
+     * Gets the name of the implementing class in a human-readable form.
+     *
+     * @return the human-readable name of the implementing class
      */
     String getDisplayString();
 }

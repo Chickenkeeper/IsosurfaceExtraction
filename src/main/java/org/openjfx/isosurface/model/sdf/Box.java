@@ -20,7 +20,7 @@ public final class Box extends SdfShape {
     private final DoubleProperty depth;
 
     /**
-     * Creates a new {@code Box} instance with specified dimensions.
+     * Constructs a new {@code Box} instance with specified dimensions.
      *
      * @param width  the width of the box
      * @param height the height of the box
@@ -34,7 +34,7 @@ public final class Box extends SdfShape {
     }
 
     /**
-     * Creates a new {@code Box} instance with default dimensions.
+     * Constructs a new {@code Box} instance with default dimensions.
      */
     public Box() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH);

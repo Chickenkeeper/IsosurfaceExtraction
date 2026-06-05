@@ -10,7 +10,7 @@ package org.openjfx.isosurface.model.util;
  */
 public record Int3(int x, int y, int z) {
     /**
-     * Returns the sum of this coordinate and another.
+     * Calculates the sum of this coordinate and another.
      *
      * @param other the coordinate to add
      * @return the sum of this coordinate and the other

@@ -7,7 +7,7 @@ public class Stopwatch {
     private long startTime;
 
     /**
-     * Creates a new {@code Stopwatch} instance.
+     * Constructs a new {@code Stopwatch} instance.
      */
     public Stopwatch() {
         start();
@@ -21,18 +21,18 @@ public class Stopwatch {
     }
 
     /**
-     * Returns the number of elapsed nanoseconds since this stopwatch was started
+     * Gets the number of elapsed nanoseconds since this stopwatch was started
      *
-     * @return the current number of elapsed nanoseconds
+     * @return the number of elapsed nanoseconds
      */
     public long getElapsedNanos() {
         return System.nanoTime() - startTime;
     }
 
     /**
-     * Returns the number of elapsed milliseconds since this stopwatch was started
+     * Gets the number of elapsed milliseconds since this stopwatch was started
      *
-     * @return the current number of elapsed milliseconds
+     * @return the number of elapsed milliseconds
      */
     public double getElapsedMillis() {
         return (double) getElapsedNanos() / 1_000_000.0;

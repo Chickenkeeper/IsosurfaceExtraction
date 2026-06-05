@@ -18,7 +18,7 @@ public final class Cone extends SdfShape {
     private final DoubleProperty height;
 
     /**
-     * Creates a new {@code Cone} instance with a given radius and height.
+     * Constructs a new {@code Cone} instance with a given radius and height.
      *
      * @param radius the radius of the base of the cone
      * @param height the height of the cone
@@ -30,7 +30,7 @@ public final class Cone extends SdfShape {
     }
 
     /**
-     * Creates a new {@code Cone} instance with a default radius and height.
+     * Constructs a new {@code Cone} instance with a default radius and height.
      */
     public Cone() {
         this(DEFAULT_RADIUS, DEFAULT_HEIGHT);

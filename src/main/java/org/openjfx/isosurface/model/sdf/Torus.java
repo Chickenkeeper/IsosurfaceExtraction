@@ -18,7 +18,7 @@ public final class Torus extends SdfShape {
     private final DoubleProperty minorRadius;
 
     /**
-     * Creates a new {@code Torus} instance with a given major and minor radius.
+     * Constructs a new {@code Torus} instance with a given major and minor radius.
      *
      * @param majorRadius the major radius of the torus
      * @param minorRadius the minor radius of the torus
@@ -30,7 +30,7 @@ public final class Torus extends SdfShape {
     }
 
     /**
-     * Creates a new {@code Torus} instance with a default ring and pipe radius.
+     * Constructs a new {@code Torus} instance with a default ring and pipe radius.
      */
     public Torus() {
         this(DEFAULT_MAJOR_RADIUS, DEFAULT_MINOR_RADIUS);

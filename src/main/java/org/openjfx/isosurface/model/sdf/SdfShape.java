@@ -24,7 +24,7 @@ public abstract class SdfShape implements Named {
     private boolean combinedTransformDirty;
 
     /**
-     * Returns a new {@code SdfShape} with a rotation and translation of 0 and a scale of 1.
+     * Constructs a new {@code SdfShape} with a rotation and translation of 0 and a scale of 1.
      */
     public SdfShape() {
         // initialize the separate transforms to their identities
@@ -50,7 +50,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the scale of this shape along the x-axis.
+     * Gets the property defining the scale of this shape along the x-axis.
      *
      * @return the scale's x property
      */
@@ -59,7 +59,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the scale of this shape along the y-axis.
+     * Gets the property defining the scale of this shape along the y-axis.
      *
      * @return the scale's y property
      */
@@ -68,7 +68,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the scale of this shape along the z-axis.
+     * Gets the property defining the scale of this shape along the z-axis.
      *
      * @return the scale's z property
      */
@@ -77,7 +77,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the degrees of rotation of this shape around the x-axis.
+     * Gets the property defining the degrees of rotation of this shape around the x-axis.
      *
      * @return the rotation's x angle property
      */
@@ -86,7 +86,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the degrees of rotation of this shape around the y-axis.
+     * Gets the property defining the degrees of rotation of this shape around the y-axis.
      *
      * @return the rotation's y angle property
      */
@@ -95,7 +95,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the degrees of rotation of this shape around the z-axis.
+     * Gets the property defining the degrees of rotation of this shape around the z-axis.
      *
      * @return the rotation's z angle property
      */
@@ -104,7 +104,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the translation of this shape along the x-axis.
+     * Gets the property defining the translation of this shape along the x-axis.
      *
      * @return the translation's x property
      */
@@ -113,7 +113,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the translation of this shape along the y-axis.
+     * Gets the property defining the translation of this shape along the y-axis.
      *
      * @return the translation's y property
      */
@@ -122,7 +122,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the property defining the translation of this shape along the z-axis.
+     * Gets the property defining the translation of this shape along the z-axis.
      *
      * @return the translation's z property
      */
@@ -168,7 +168,7 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns an array of points representing the corners of a bounding box.
+     * Gets an array of points representing the corners of a bounding box.
      *
      * @param bounds the bounding box to extract the corners from
      * @return the corners of the bounding box
@@ -267,14 +267,14 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the local-space bounding box of this shape.
+     * Gets the local-space bounding box of this shape.
      *
      * @return the local-space bounding box of this shape
      */
     public abstract BoundingBox getLocalBounds();
 
     /**
-     * Returns the world-space bounding box of this shape.
+     * Gets the world-space bounding box of this shape.
      *
      * @return the world-space bounding box of this shape
      */
@@ -283,19 +283,25 @@ public abstract class SdfShape implements Named {
     }
 
     /**
-     * Returns the signed distance from a point to the surface of this shape in local-space.
+     * Gets the signed distance from a point to the surface of this shape in local-space.
      *
      * @param point the local-space point to find the distance from
      * @return the distance between this shape and the local-space point
      */
     public abstract double getLocalDistance(Point3D point);
 
+    /**
+     * Gets the signed distance from a point to the surface of this shape in world-space.
+     *
+     * @param point the world-space point to find the distance from
+     * @return the distance between this shape and the world-space point
+     */
     public double getWorldDistance(Point3D point) {
         return getLocalDistance(worldToLocalPoint(point));
     }
 
     /**
-     * Returns a list of all parameters of this shape.
+     * Gets a list of all parameters of this shape.
      *
      * @return the parameters of this shape
      */

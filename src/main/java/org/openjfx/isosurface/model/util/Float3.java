@@ -12,7 +12,7 @@ import javafx.geometry.Point3D;
  */
 public record Float3(float x, float y, float z) {
     /**
-     * Returns the sum of this coordinate and another.
+     * Calculates the sum of this coordinate and another.
      *
      * @param other the coordinate to add
      * @return the sum of this coordinate and the other
@@ -26,7 +26,7 @@ public record Float3(float x, float y, float z) {
     }
 
     /**
-     * Returns the result of subtracting another coordinate from this one.
+     * Calculates the result of subtracting another coordinate from this one.
      *
      * @param other the coordinate to subtract
      * @return the other coordinate subtracted from this one
@@ -40,7 +40,7 @@ public record Float3(float x, float y, float z) {
     }
 
     /**
-     * Returns the result of multiplying this coordinate by a scalar.
+     * Calculates the result of multiplying this coordinate by a scalar.
      *
      * @param scalar the scalar to multiply this coordinate with
      * @return this coordinate multiplied by the scalar
@@ -69,7 +69,7 @@ public record Float3(float x, float y, float z) {
     }
 
     /**
-     * Returns the dot product of this coordinate and another.
+     * Calculates the dot product of this coordinate and another.
      *
      * @param other the coordinate to perform a dot product with
      * @return the dot product of this coordinate and the other
@@ -79,7 +79,7 @@ public record Float3(float x, float y, float z) {
     }
 
     /**
-     * Returns the squared distance between this coordinate and another.
+     * Calculates the squared distance between this coordinate and another.
      *
      * @param target the coordinate to find the distance to
      * @return the squared distance between this coordinate and the other

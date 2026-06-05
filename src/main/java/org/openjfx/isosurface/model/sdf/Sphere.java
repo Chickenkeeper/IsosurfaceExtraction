@@ -16,7 +16,7 @@ public final class Sphere extends SdfShape {
     private final DoubleProperty radius;
 
     /**
-     * Creates a new {@code Sphere} instance with a given radius.
+     * Constructs a new {@code Sphere} instance with a given radius.
      *
      * @param radius the radius of the sphere
      */
@@ -26,7 +26,7 @@ public final class Sphere extends SdfShape {
     }
 
     /**
-     * Creates a new {@code Sphere} instance with a default radius.
+     * Constructs a new {@code Sphere} instance with a default radius.
      */
     public Sphere() {
         this(DEFAULT_RADIUS);

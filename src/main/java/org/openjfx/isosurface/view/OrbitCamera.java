@@ -24,7 +24,7 @@ public final class OrbitCamera {
     private int zoomLevel;
 
     /**
-     * Creates an {@code OrbitCamera} with a specified zoom level, target height, yaw and pitch.
+     * Constructs an {@code OrbitCamera} with a specified zoom level, target height, yaw and pitch.
      *
      * @param zoomLevel the zoom level
      * @param height    the offset of the camera's target along the y-axis
@@ -54,7 +54,7 @@ public final class OrbitCamera {
     }
 
     /**
-     * Creates an {@code OrbitCamera} with default properties.
+     * Constructs an {@code OrbitCamera} with default properties.
      */
     public OrbitCamera() {
         this(DEFAULT_ZOOM_LEVEL, DEFAULT_HEIGHT, DEFAULT_YAW, DEFAULT_PITCH);
@@ -129,7 +129,7 @@ public final class OrbitCamera {
     }
 
     /**
-     * Returns the {@code Rotation} defining the pitch of this orbit camera.
+     * Gets the {@code Rotation} defining the pitch of this orbit camera.
      *
      * @return the rotation defining the pitch of this orbit camera
      */
@@ -138,7 +138,7 @@ public final class OrbitCamera {
     }
 
     /**
-     * Returns the {@code Rotation} defining the pitch of this orbit camera.
+     * Gets the {@code Rotation} defining the pitch of this orbit camera.
      *
      * @return the rotation defining the pitch of this orbit camera
      */
@@ -147,7 +147,7 @@ public final class OrbitCamera {
     }
 
     /**
-     * Returns the {@code PerspectiveCamera} used by this orbit camera
+     * Gets the {@code PerspectiveCamera} used by this orbit camera
      *
      * @return the perspective camera used by this orbit camera
      */
