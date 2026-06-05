@@ -23,13 +23,13 @@ java {
 }
 
 javafx {
-    version = "25"
-    modules = [ 'javafx.controls' ]
+    version = '25'
+    modules = ['javafx.controls']
 }
 
 application {
-    mainClass = "org.openjfx.isosurface.Main"
-    mainModule = "IsosurfaceExtraction.main"
+    mainClass = 'org.openjfx.isosurface.Main'
+    mainModule = 'IsosurfaceExtraction.main'
     applicationDefaultJvmArgs = [
         '--enable-native-access=javafx.graphics'
     ]
