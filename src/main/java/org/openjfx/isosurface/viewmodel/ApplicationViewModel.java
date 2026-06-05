@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point3D;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.model.sdf.*;
 import org.openjfx.isosurface.model.suface.Blocky;
@@ -99,7 +100,7 @@ public class ApplicationViewModel {
             shape.scaleYProperty().bindBidirectional(shapeScaleY);
             shape.scaleZProperty().bindBidirectional(shapeScaleZ);
 
-            for (final ShapeParameter parameter : shape.getParameters()) {
+            for (final DoubleParameter parameter : shape.getParameters()) {
                 parameter.value().addListener(_ -> updateVoxelGrid());
             }
         }

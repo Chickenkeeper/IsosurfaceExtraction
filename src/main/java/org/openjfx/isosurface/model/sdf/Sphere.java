@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 
 import java.util.List;
 
@@ -69,8 +70,8 @@ public final class Sphere extends SdfShape {
     }
 
     @Override
-    public List<ShapeParameter> getParameters() {
-        return List.of(new ShapeParameter("Radius", radius, DEFAULT_RADIUS));
+    public List<DoubleParameter> getParameters() {
+        return List.of(new DoubleParameter("Radius", radius, DEFAULT_RADIUS));
     }
 
     @Override

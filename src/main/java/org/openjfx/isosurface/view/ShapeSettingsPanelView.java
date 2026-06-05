@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import org.openjfx.isosurface.model.sdf.SdfShape;
-import org.openjfx.isosurface.model.sdf.ShapeParameter;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 import org.openjfx.isosurface.viewmodel.ApplicationViewModel;
 
 /**
@@ -102,7 +102,7 @@ public class ShapeSettingsPanelView extends GridPane {
             rowConstraints.maxHeightProperty().bind(Bindings.when(
                     shapeSelector.valueProperty().isEqualTo(shape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
 
-            for (final ShapeParameter parameter : shape.getParameters()) {
+            for (final DoubleParameter parameter : shape.getParameters()) {
                 final Label label = new Label(parameter.name());
                 final NumberField field = new NumberField(0.0, Double.MAX_VALUE, parameter.defaultValue());
 

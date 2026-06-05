@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 
 import java.util.List;
 
@@ -86,10 +87,10 @@ public final class Torus extends SdfShape {
     }
 
     @Override
-    public List<ShapeParameter> getParameters() {
+    public List<DoubleParameter> getParameters() {
         return List.of(
-                new ShapeParameter("Major Radius", majorRadius, DEFAULT_MAJOR_RADIUS),
-                new ShapeParameter("Minor Radius", minorRadius, DEFAULT_MINOR_RADIUS)
+                new DoubleParameter("Major Radius", majorRadius, DEFAULT_MAJOR_RADIUS),
+                new DoubleParameter("Minor Radius", minorRadius, DEFAULT_MINOR_RADIUS)
         );
     }
 

@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 
 import java.util.List;
 
@@ -109,11 +110,11 @@ public final class Box extends SdfShape {
     }
 
     @Override
-    public List<ShapeParameter> getParameters() {
+    public List<DoubleParameter> getParameters() {
         return List.of(
-                new ShapeParameter("Width", width, DEFAULT_WIDTH),
-                new ShapeParameter("Height", height, DEFAULT_DEPTH),
-                new ShapeParameter("Depth", depth, DEFAULT_HEIGHT)
+                new DoubleParameter("Width", width, DEFAULT_WIDTH),
+                new DoubleParameter("Height", height, DEFAULT_DEPTH),
+                new DoubleParameter("Depth", depth, DEFAULT_HEIGHT)
         );
     }
 

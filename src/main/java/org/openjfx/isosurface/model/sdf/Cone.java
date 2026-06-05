@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 
 import java.util.List;
 
@@ -109,10 +110,10 @@ public final class Cone extends SdfShape {
     }
 
     @Override
-    public List<ShapeParameter> getParameters() {
+    public List<DoubleParameter> getParameters() {
         return List.of(
-                new ShapeParameter("Radius", radius, DEFAULT_RADIUS),
-                new ShapeParameter("Height", height, DEFAULT_HEIGHT)
+                new DoubleParameter("Radius", radius, DEFAULT_RADIUS),
+                new DoubleParameter("Height", height, DEFAULT_HEIGHT)
         );
     }
 

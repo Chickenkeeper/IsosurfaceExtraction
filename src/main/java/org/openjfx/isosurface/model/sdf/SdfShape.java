@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.*;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 import org.openjfx.isosurface.model.util.Named;
 
 import java.util.List;
@@ -305,5 +306,5 @@ public abstract class SdfShape implements Named {
      *
      * @return the parameters of this shape
      */
-    public abstract List<ShapeParameter> getParameters();
+    public abstract List<DoubleParameter> getParameters();
 }
