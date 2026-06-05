@@ -33,7 +33,7 @@ public class ScrollableComboBox<T extends Named> extends ComboBox<T> {
             final SelectionModel<T> shapeSelectionModel = getSelectionModel();
             final int numItems = getItems().size();
             final double deltaScroll = e.isShiftDown() ? e.getDeltaX() : e.getDeltaY();
-            final int deltaIndex = deltaScroll > 0 ? 1 : -1;
+            final int deltaIndex = deltaScroll < 0 ? 1 : -1;
             final int currSelectedIndex = shapeSelectionModel.getSelectedIndex();
             final int newSelectedIndex = (currSelectedIndex + deltaIndex + numItems) % numItems;
 
