@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import org.openjfx.isosurface.model.sdf.SdfShape;
+import org.openjfx.isosurface.model.sdf.SdfTransform;
 import org.openjfx.isosurface.model.util.DoubleParameter;
 import org.openjfx.isosurface.viewmodel.ApplicationViewModel;
 
@@ -38,38 +39,39 @@ public class ShapeSettingsPanelView extends GridPane {
         final Label yLabel = new Label("Y");
         final Label zLabel = new Label("Z");
 
+        final SdfTransform shapeTransform = applicationViewModel.getShapeTransform();
         final Label translationLabel = new Label("Translation");
         final NumberField shapeTranslationX =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeTranslationX());
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationX());
         final NumberField shapeTranslationY =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeTranslationY());
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationY());
         final NumberField shapeTranslationZ =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeTranslationZ());
-        shapeTranslationX.valueProperty().bindBidirectional(applicationViewModel.shapeTranslationXProperty());
-        shapeTranslationY.valueProperty().bindBidirectional(applicationViewModel.shapeTranslationYProperty());
-        shapeTranslationZ.valueProperty().bindBidirectional(applicationViewModel.shapeTranslationZProperty());
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationZ());
+        shapeTranslationX.valueProperty().bindBidirectional(shapeTransform.translationXProperty());
+        shapeTranslationY.valueProperty().bindBidirectional(shapeTransform.translationYProperty());
+        shapeTranslationZ.valueProperty().bindBidirectional(shapeTransform.translationZProperty());
 
         final Label rotationLabel = new Label("Rotation");
         final NumberField shapeRotationX =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeRotationX(), 1.0, "0.0°");
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationX(), 1.0, "0.0°");
         final NumberField shapeRotationY =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeRotationY(), 1.0, "0.0°");
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationY(), 1.0, "0.0°");
         final NumberField shapeRotationZ =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getShapeRotationZ(), 1.0, "0.0°");
-        shapeRotationX.valueProperty().bindBidirectional(applicationViewModel.shapeRotationXProperty());
-        shapeRotationY.valueProperty().bindBidirectional(applicationViewModel.shapeRotationYProperty());
-        shapeRotationZ.valueProperty().bindBidirectional(applicationViewModel.shapeRotationZProperty());
+                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationZ(), 1.0, "0.0°");
+        shapeRotationX.valueProperty().bindBidirectional(shapeTransform.rotationXProperty());
+        shapeRotationY.valueProperty().bindBidirectional(shapeTransform.rotationYProperty());
+        shapeRotationZ.valueProperty().bindBidirectional(shapeTransform.rotationZProperty());
 
         final Label scaleLabel = new Label("Scale");
         final NumberField shapeScaleX =
-                new NumberField(0.001, Double.MAX_VALUE, applicationViewModel.getShapeScaleX());
+                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleX());
         final NumberField shapeScaleY =
-                new NumberField(0.001, Double.MAX_VALUE, applicationViewModel.getShapeScaleY());
+                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleY());
         final NumberField shapeScaleZ =
-                new NumberField(0.001, Double.MAX_VALUE, applicationViewModel.getShapeScaleZ());
-        shapeScaleX.valueProperty().bindBidirectional(applicationViewModel.shapeScaleXProperty());
-        shapeScaleY.valueProperty().bindBidirectional(applicationViewModel.shapeScaleYProperty());
-        shapeScaleZ.valueProperty().bindBidirectional(applicationViewModel.shapeScaleZProperty());
+                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleZ());
+        shapeScaleX.valueProperty().bindBidirectional(shapeTransform.scaleXProperty());
+        shapeScaleY.valueProperty().bindBidirectional(shapeTransform.scaleYProperty());
+        shapeScaleZ.valueProperty().bindBidirectional(shapeTransform.scaleZProperty());
 
         final ColumnConstraints col0Constraint = new ColumnConstraints();
         col0Constraint.setPercentWidth(31);

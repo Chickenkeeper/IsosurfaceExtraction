@@ -8,14 +8,14 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point3D;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
-import org.openjfx.isosurface.model.util.DoubleParameter;
-import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.model.sdf.*;
 import org.openjfx.isosurface.model.suface.Blocky;
 import org.openjfx.isosurface.model.suface.MarchingCubes;
 import org.openjfx.isosurface.model.suface.SdfMeshBuilder;
 import org.openjfx.isosurface.model.suface.SurfaceNets;
+import org.openjfx.isosurface.model.util.DoubleParameter;
 import org.openjfx.isosurface.model.util.Stopwatch;
+import org.openjfx.isosurface.model.voxel.VoxelGrid;
 
 /**
  * Provides the main functionality of the application, and facilitates
@@ -28,20 +28,11 @@ public class ApplicationViewModel {
     // shape properties
     private final ObservableList<SdfShape> shapes;
     private final IntegerProperty shapeSelectedIndex;
-    private final DoubleProperty shapeTranslationX;
-    private final DoubleProperty shapeTranslationY;
-    private final DoubleProperty shapeTranslationZ;
-    private final DoubleProperty shapeRotationX;
-    private final DoubleProperty shapeRotationY;
-    private final DoubleProperty shapeRotationZ;
-    private final DoubleProperty shapeScaleX;
-    private final DoubleProperty shapeScaleY;
-    private final DoubleProperty shapeScaleZ;
+    private final SdfTransform shapeTransform;
 
     // surface properties
     private final ObservableList<SdfMeshBuilder> meshBuilders;
     private final IntegerProperty meshBuilderSelectedIndex;
-    private final DoubleProperty voxelSize;
     private final DoubleProperty isoLevel;
     private final BooleanProperty useSmoothShading;
     private final BooleanProperty drawWireframe;
@@ -65,41 +56,21 @@ public class ApplicationViewModel {
         shapes = FXCollections.observableArrayList(new Torus(), new Sphere(), new Cone(), new Box());
         shapeSelectedIndex = new SimpleIntegerProperty(0);
         shapeSelectedIndex.addListener(_ -> updateVoxelGrid());
+        shapeTransform = new SdfTransform();
 
-        shapeTranslationX = new SimpleDoubleProperty(0.0);
-        shapeTranslationY = new SimpleDoubleProperty(0.0);
-        shapeTranslationZ = new SimpleDoubleProperty(0.0);
-        shapeTranslationX.addListener(_ -> updateVoxelGrid());
-        shapeTranslationY.addListener(_ -> updateVoxelGrid());
-        shapeTranslationZ.addListener(_ -> updateVoxelGrid());
+        shapeTransform.translationXProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.translationYProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.translationZProperty().addListener(_ -> updateVoxelGrid());
 
-        shapeRotationX = new SimpleDoubleProperty(0.0);
-        shapeRotationY = new SimpleDoubleProperty(0.0);
-        shapeRotationZ = new SimpleDoubleProperty(0.0);
-        shapeRotationX.addListener(_ -> updateVoxelGrid());
-        shapeRotationY.addListener(_ -> updateVoxelGrid());
-        shapeRotationZ.addListener(_ -> updateVoxelGrid());
+        shapeTransform.rotationXProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.rotationYProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.rotationZProperty().addListener(_ -> updateVoxelGrid());
 
-        shapeScaleX = new SimpleDoubleProperty(1.0);
-        shapeScaleY = new SimpleDoubleProperty(1.0);
-        shapeScaleZ = new SimpleDoubleProperty(1.0);
-        shapeScaleX.addListener(_ -> updateVoxelGrid());
-        shapeScaleY.addListener(_ -> updateVoxelGrid());
-        shapeScaleZ.addListener(_ -> updateVoxelGrid());
+        shapeTransform.scaleXProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.scaleYProperty().addListener(_ -> updateVoxelGrid());
+        shapeTransform.scaleZProperty().addListener(_ -> updateVoxelGrid());
 
         for (final SdfShape shape : shapes) {
-            shape.translationXProperty().bindBidirectional(shapeTranslationX);
-            shape.translationYProperty().bindBidirectional(shapeTranslationY);
-            shape.translationZProperty().bindBidirectional(shapeTranslationZ);
-
-            shape.rotationXProperty().bindBidirectional(shapeRotationX);
-            shape.rotationYProperty().bindBidirectional(shapeRotationY);
-            shape.rotationZProperty().bindBidirectional(shapeRotationZ);
-
-            shape.scaleXProperty().bindBidirectional(shapeScaleX);
-            shape.scaleYProperty().bindBidirectional(shapeScaleY);
-            shape.scaleZProperty().bindBidirectional(shapeScaleZ);
-
             for (final DoubleParameter parameter : shape.getParameters()) {
                 parameter.value().addListener(_ -> updateVoxelGrid());
             }
@@ -110,9 +81,7 @@ public class ApplicationViewModel {
         meshBuilderSelectedIndex = new SimpleIntegerProperty(0);
         meshBuilderSelectedIndex.addListener(_ -> updateMesh());
 
-        voxelSize = new SimpleDoubleProperty(0.1);
-        voxelSize.addListener(_ -> updateVoxelGrid());
-        voxelGrid.voxelSizeProperty().bind(voxelSize);
+        voxelGrid.voxelSizeProperty().addListener(_ -> updateVoxelGrid());
 
         isoLevel = new SimpleDoubleProperty(0.0);
         isoLevel.addListener(_ -> updateMesh());
@@ -180,165 +149,12 @@ public class ApplicationViewModel {
     }
 
     /**
-     * Gets the value of the shape's X-axis translation property.
+     * Gets the sdf shape transform instance.
      *
-     * @return the value of the shape's X-axis translation property
+     * @return the sdf shape transform
      */
-    public double getShapeTranslationX() {
-        return shapeTranslationX.get();
-    }
-
-    /**
-     * Gets the translation of the selected shape along the X-axis.
-     *
-     * @return the X-axis translation of the shape
-     */
-    public DoubleProperty shapeTranslationXProperty() {
-        return shapeTranslationX;
-    }
-
-    /**
-     * Gets the value of the shape's Y-axis translation property.
-     *
-     * @return the value of the shape's Y-axis translation property
-     */
-    public double getShapeTranslationY() {
-        return shapeTranslationY.get();
-    }
-
-    /**
-     * Gets the translation of the selected shape along the Y-axis.
-     *
-     * @return the Y-axis translation of the shape
-     */
-    public DoubleProperty shapeTranslationYProperty() {
-        return shapeTranslationY;
-    }
-
-    /**
-     * Gets the value of the shape's Z-axis translation property.
-     *
-     * @return the value of the shape's Z-axis translation property
-     */
-    public double getShapeTranslationZ() {
-        return shapeTranslationZ.get();
-    }
-
-    /**
-     * Gets the translation of the selected shape along the Z-axis.
-     *
-     * @return the Z-axis translation of the shape
-     */
-    public DoubleProperty shapeTranslationZProperty() {
-        return shapeTranslationZ;
-    }
-
-    /**
-     * Gets the value of the shape's X-axis rotation property.
-     *
-     * @return the value of the shape's X-axis rotation property
-     */
-    public double getShapeRotationX() {
-        return shapeRotationX.get();
-    }
-
-    /**
-     * Gets the rotation of the selected shape along the X-axis in degrees.
-     *
-     * @return the X-axis rotation of the shape
-     */
-    public DoubleProperty shapeRotationXProperty() {
-        return shapeRotationX;
-    }
-
-    /**
-     * Gets the value of the shape's Y-axis rotation property.
-     *
-     * @return the value of the shape's Y-axis rotation property
-     */
-    public double getShapeRotationY() {
-        return shapeRotationY.get();
-    }
-
-    /**
-     * Gets the rotation of the selected shape along the Y-axis in degrees.
-     *
-     * @return the Y-axis rotation of the shape
-     */
-    public DoubleProperty shapeRotationYProperty() {
-        return shapeRotationY;
-    }
-
-    /**
-     * Gets the value of the shape's Z-axis rotation property.
-     *
-     * @return the value of the shape's Z-axis rotation property
-     */
-    public double getShapeRotationZ() {
-        return shapeRotationZ.get();
-    }
-
-    /**
-     * Gets the rotation of the selected shape along the Z-axis in degrees.
-     *
-     * @return the Z-axis rotation of the shape
-     */
-    public DoubleProperty shapeRotationZProperty() {
-        return shapeRotationZ;
-    }
-
-    /**
-     * Gets the value of the shape's X-axis scale property.
-     *
-     * @return the value of the shape's X-axis scale property
-     */
-    public double getShapeScaleX() {
-        return shapeScaleX.get();
-    }
-
-    /**
-     * Gets the scale of the selected shape along the X-axis.
-     *
-     * @return the X-axis scale of the shape
-     */
-    public DoubleProperty shapeScaleXProperty() {
-        return shapeScaleX;
-    }
-
-    /**
-     * Gets the value of the shape's Y-axis scale property.
-     *
-     * @return the value of the shape's Y-axis scale property
-     */
-    public double getShapeScaleY() {
-        return shapeScaleY.get();
-    }
-
-    /**
-     * Gets the scale of the selected shape along the Y-axis.
-     *
-     * @return the Y-axis scale of the shape
-     */
-    public DoubleProperty shapeScaleYProperty() {
-        return shapeScaleY;
-    }
-
-    /**
-     * Gets the value of the shape's Z-axis scale property.
-     *
-     * @return the value of the shape's Z-axis scale property
-     */
-    public double getShapeScaleZ() {
-        return shapeScaleZ.get();
-    }
-
-    /**
-     * Gets the scale of the selected shape along the Z-axis.
-     *
-     * @return the Z-axis scale of the shape
-     */
-    public DoubleProperty shapeScaleZProperty() {
-        return shapeScaleZ;
+    public SdfTransform getShapeTransform() {
+        return shapeTransform;
     }
 
     /**
@@ -366,24 +182,6 @@ public class ApplicationViewModel {
      */
     public IntegerProperty meshBuilderSelectedIndexProperty() {
         return meshBuilderSelectedIndex;
-    }
-
-    /**
-     * Gets the value of the voxel size property.
-     *
-     * @return the value of the voxel size property
-     */
-    public double getVoxelSize() {
-        return voxelSize.get();
-    }
-
-    /**
-     * Gets the size of the voxels in the voxel grid.
-     *
-     * @return the size of the voxels in the voxel grid
-     */
-    public DoubleProperty voxelSizeProperty() {
-        return voxelSize;
     }
 
     /**
@@ -537,10 +335,10 @@ public class ApplicationViewModel {
         final SdfShape shape = shapes.get(shapeSelectedIndex.get());
         final Stopwatch stopwatch = new Stopwatch();
 
-        voxelGrid.fitToShape(shape);
+        voxelGrid.fitToShape(shape, shapeTransform);
 
         stopwatch.start();
-        voxelGrid.voxelizeShape(shape);
+        voxelGrid.voxelizeShape(shape, shapeTransform);
         final double voxelizationDurationMs = stopwatch.getElapsedMillis();
 
         timeVoxelization.set(voxelizationDurationMs);

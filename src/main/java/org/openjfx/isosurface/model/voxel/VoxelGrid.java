@@ -3,7 +3,9 @@ package org.openjfx.isosurface.model.voxel;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.geometry.BoundingBox;
+import javafx.geometry.Point3D;
 import org.openjfx.isosurface.model.sdf.SdfShape;
+import org.openjfx.isosurface.model.sdf.SdfTransform;
 import org.openjfx.isosurface.model.util.Float3;
 import org.openjfx.isosurface.model.util.Int3;
 
@@ -65,18 +67,18 @@ public final class VoxelGrid {
     }
 
     /**
-     * Gets the actual size of each voxel in world space.
+     * Gets the value of the voxel size property.
      *
-     * @return the size of each voxel
+     * @return the value of the voxel size property
      */
     public float getVoxelSize() {
         return voxelSize.get();
     }
 
     /**
-     * Gets the property defining the size of each voxel in world space
+     * Gets the actual size of each voxel in world space.
      *
-     * @return the property defining the size of each voxel
+     * @return the size of each voxel in world space
      */
     public FloatProperty voxelSizeProperty() {
         return voxelSize;
@@ -227,10 +229,10 @@ public final class VoxelGrid {
      *
      * @param shape the shape to fit this voxel grid to
      */
-    public void fitToShape(SdfShape shape) {
+    public void fitToShape(SdfShape shape, SdfTransform transform) {
         final float voxelSize = getVoxelSize();
         final float voxelSizeReciprocal = 1.0f / voxelSize;
-        final BoundingBox shapeBounds = shape.getWorldBounds();
+        final BoundingBox shapeBounds = transform.localToWorldBounds(shape.getLocalBounds());
 
         posX = ((float) Math.floor(shapeBounds.getMinX() * voxelSizeReciprocal) - 1.0f) * voxelSize;
         posY = ((float) Math.floor(shapeBounds.getMinY() * voxelSizeReciprocal) - 1.0f) * voxelSize;
@@ -253,12 +255,13 @@ public final class VoxelGrid {
      *
      * @param shape the shape to store within this voxel grid
      */
-    public void voxelizeShape(SdfShape shape) {
+    public void voxelizeShape(SdfShape shape, SdfTransform transform) {
         for (int z = 0; z < depth; z++) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     final Float3 voxelCenterPos = getVoxelCenterPos(x, y, z);
-                    final float distance = (float) shape.getWorldDistance(voxelCenterPos.toPoint3D());
+                    final Point3D localPoint = transform.worldToLocalPoint(voxelCenterPos.toPoint3D());
+                    final float distance = (float) shape.getLocalDistance(localPoint);
 
                     setVoxel(x, y, z, distance);
                 }

@@ -7,6 +7,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import org.openjfx.isosurface.model.suface.SdfMeshBuilder;
+import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.viewmodel.ApplicationViewModel;
 
 /**
@@ -31,10 +32,11 @@ public class SurfaceSettingsPanelView extends GridPane {
         applicationViewModel.meshBuilderSelectedIndexProperty().addListener((_, _, newValue) ->
                 algorithmSelector.getSelectionModel().select(newValue.intValue()));
 
+        final VoxelGrid voxelGrid = applicationViewModel.getVoxelGrid();
         final Label voxelSizeLabel = new Label("Voxel Size");
         final NumberField voxelSize =
-                new NumberField(0.025, 0.25, applicationViewModel.getVoxelSize(), 0.005, "0.000");
-        voxelSize.valueProperty().bindBidirectional(applicationViewModel.voxelSizeProperty());
+                new NumberField(0.025, 0.25, voxelGrid.getVoxelSize(), 0.005, "0.000");
+        voxelSize.valueProperty().bindBidirectional(voxelGrid.voxelSizeProperty());
 
         final Label isoLevelLabel = new Label("Iso Level");
         final NumberField isoLevel =
