@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point3D;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
-import org.openjfx.isosurface.VoxelGrid;
+import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.model.sdf.*;
 import org.openjfx.isosurface.model.suface.Blocky;
 import org.openjfx.isosurface.model.suface.MarchingCubes;

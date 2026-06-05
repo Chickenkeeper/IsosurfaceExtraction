@@ -1,4 +1,4 @@
-package org.openjfx.isosurface;
+package org.openjfx.isosurface.model.voxel;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
