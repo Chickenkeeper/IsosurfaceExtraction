@@ -63,7 +63,7 @@ public class SurfaceNets extends SdfMeshBuilder {
                     final boolean pStartExterior = dStart < isoLevel;
 
                     // loop over each edge that starts from the current voxel and
-                    // ends at a neighbouring voxel in the positive X, Y, and Z axes
+                    // ends at a neighboring voxel in the positive X, Y, and Z axes
                     for (int i = 0; i < 3; i++) {
                         final Axis axis = Axis.values()[i];
                         final Int3 endCoord = startCoord.add(edgeEndOffsets[i]);
@@ -105,7 +105,7 @@ public class SurfaceNets extends SdfMeshBuilder {
             voxelPoints.put(key, voxelPoints.get(key).mult(numEdgesReciprocal));
         }
 
-        // for each edge that intersects the surface, construct a quad from the points inside its neighbouring voxels
+        // for each edge that intersects the surface, construct a quad from the points inside its neighboring voxels
         for (int i = 0; i < edgeStartCoords.size(); i++) {
             final Int3 voxelCoord = edgeStartCoords.get(i);
 
