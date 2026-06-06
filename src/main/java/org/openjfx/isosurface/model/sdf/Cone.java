@@ -63,12 +63,12 @@ public final class Cone extends SdfShape {
         final double halfHeight = heightValue * 0.5;
 
         return new BoundingBox(
-                -radiusValue,
-                -halfHeight,
-                -radiusValue,
-                diameter,
-                heightValue,
-                diameter
+            -radiusValue,
+            -halfHeight,
+            -radiusValue,
+            diameter,
+            heightValue,
+            diameter
         );
     }
 
@@ -112,8 +112,8 @@ public final class Cone extends SdfShape {
     @Override
     public List<DoubleParameter> getParameters() {
         return List.of(
-                new DoubleParameter("Radius", radius, DEFAULT_RADIUS),
-                new DoubleParameter("Height", height, DEFAULT_HEIGHT)
+            new DoubleParameter("Radius", radius, DEFAULT_RADIUS),
+            new DoubleParameter("Height", height, DEFAULT_HEIGHT)
         );
     }
 

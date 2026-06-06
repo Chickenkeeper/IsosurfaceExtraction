@@ -1,9 +1,9 @@
 package org.openjfx.isosurface.model.suface;
 
 import javafx.scene.shape.TriangleMesh;
-import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.model.util.Float3;
 import org.openjfx.isosurface.model.util.Named;
+import org.openjfx.isosurface.model.voxel.VoxelGrid;
 
 import java.util.HashMap;
 

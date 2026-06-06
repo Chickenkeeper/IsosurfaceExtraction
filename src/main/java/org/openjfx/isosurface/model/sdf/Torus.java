@@ -63,12 +63,12 @@ public final class Torus extends SdfShape {
         final double height = halfHeight * 2.0;
 
         return new BoundingBox(
-                -halfWidth,
-                -halfHeight,
-                -halfWidth,
-                width,
-                height,
-                width
+            -halfWidth,
+            -halfHeight,
+            -halfWidth,
+            width,
+            height,
+            width
         );
     }
 
@@ -89,8 +89,8 @@ public final class Torus extends SdfShape {
     @Override
     public List<DoubleParameter> getParameters() {
         return List.of(
-                new DoubleParameter("Major Radius", majorRadius, DEFAULT_MAJOR_RADIUS),
-                new DoubleParameter("Minor Radius", minorRadius, DEFAULT_MINOR_RADIUS)
+            new DoubleParameter("Major Radius", majorRadius, DEFAULT_MAJOR_RADIUS),
+            new DoubleParameter("Minor Radius", minorRadius, DEFAULT_MINOR_RADIUS)
         );
     }
 

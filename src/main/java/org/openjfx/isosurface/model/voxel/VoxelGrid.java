@@ -167,9 +167,9 @@ public final class VoxelGrid {
         final float voxelSize = getVoxelSize();
 
         return new Float3(
-                (float) x * voxelSize + posX,
-                (float) y * voxelSize + posY,
-                (float) z * voxelSize + posZ
+            (float) x * voxelSize + posX,
+            (float) y * voxelSize + posY,
+            (float) z * voxelSize + posZ
         );
     }
 

@@ -19,9 +19,9 @@ public record Float3(float x, float y, float z) {
      */
     public Float3 add(Float3 other) {
         return new Float3(
-                x + other.x(),
-                y + other.y(),
-                z + other.z()
+            x + other.x(),
+            y + other.y(),
+            z + other.z()
         );
     }
 
@@ -33,9 +33,9 @@ public record Float3(float x, float y, float z) {
      */
     public Float3 sub(Float3 other) {
         return new Float3(
-                x - other.x(),
-                y - other.y(),
-                z - other.z()
+            x - other.x(),
+            y - other.y(),
+            z - other.z()
         );
     }
 
@@ -47,9 +47,9 @@ public record Float3(float x, float y, float z) {
      */
     public Float3 mult(float scalar) {
         return new Float3(
-                x * scalar,
-                y * scalar,
-                z * scalar
+            x * scalar,
+            y * scalar,
+            z * scalar
         );
     }
 
@@ -62,9 +62,9 @@ public record Float3(float x, float y, float z) {
      */
     public Float3 lerp(Float3 target, float t) {
         return new Float3(
-                x * (1.0f - t) + target.x() * t,
-                y * (1.0f - t) + target.y() * t,
-                z * (1.0f - t) + target.z() * t
+            x * (1.0f - t) + target.x() * t,
+            y * (1.0f - t) + target.y() * t,
+            z * (1.0f - t) + target.z() * t
         );
     }
 

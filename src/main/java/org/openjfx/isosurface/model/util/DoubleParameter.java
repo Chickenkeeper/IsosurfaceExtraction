@@ -13,8 +13,8 @@ import javafx.beans.property.DoubleProperty;
  * @param defaultValue the parameter's default value
  */
 public record DoubleParameter(
-        String name,
-        DoubleProperty value,
-        double defaultValue
+    String name,
+    DoubleProperty value,
+    double defaultValue
 ) {
 }

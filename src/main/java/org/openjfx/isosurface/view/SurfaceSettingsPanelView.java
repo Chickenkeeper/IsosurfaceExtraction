@@ -28,19 +28,19 @@ public class SurfaceSettingsPanelView extends GridPane {
         algorithmSelector.setItems(applicationViewModel.getMeshBuilders());
         algorithmSelector.getSelectionModel().select(applicationViewModel.getMeshBuilderSelectedIndex());
         algorithmSelector.getSelectionModel().selectedIndexProperty().addListener((_, _, newValue) ->
-                applicationViewModel.meshBuilderSelectedIndexProperty().set(newValue.intValue()));
+            applicationViewModel.meshBuilderSelectedIndexProperty().set(newValue.intValue()));
         applicationViewModel.meshBuilderSelectedIndexProperty().addListener((_, _, newValue) ->
-                algorithmSelector.getSelectionModel().select(newValue.intValue()));
+            algorithmSelector.getSelectionModel().select(newValue.intValue()));
 
         final VoxelGrid voxelGrid = applicationViewModel.getVoxelGrid();
         final Label voxelSizeLabel = new Label("Voxel Size");
         final NumberField voxelSize =
-                new NumberField(0.025, 0.25, voxelGrid.getVoxelSize(), 0.005, "0.000");
+            new NumberField(0.025, 0.25, voxelGrid.getVoxelSize(), 0.005, "0.000");
         voxelSize.valueProperty().bindBidirectional(voxelGrid.voxelSizeProperty());
 
         final Label isoLevelLabel = new Label("Iso Level");
         final NumberField isoLevel =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getIsoLevel(), 0.025, "0.000");
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, applicationViewModel.getIsoLevel(), 0.025, "0.000");
         isoLevel.valueProperty().bindBidirectional(applicationViewModel.isoLevelProperty());
 
         final Label smoothShadingCheckBoxLabel = new Label("Smooth Shading");

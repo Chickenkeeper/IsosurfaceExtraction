@@ -17,9 +17,9 @@ public record Int3(int x, int y, int z) {
      */
     public Int3 add(Int3 other) {
         return new Int3(
-                x + other.x(),
-                y + other.y(),
-                z + other.z()
+            x + other.x(),
+            y + other.y(),
+            z + other.z()
         );
     }
 }

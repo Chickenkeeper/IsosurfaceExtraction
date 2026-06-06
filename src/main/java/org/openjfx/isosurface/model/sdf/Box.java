@@ -75,12 +75,12 @@ public final class Box extends SdfShape {
         final double depthValue = depth.get();
 
         return new BoundingBox(
-                -widthValue * 0.5,
-                -heightValue * 0.5,
-                -depthValue * 0.5,
-                widthValue,
-                heightValue,
-                depthValue
+            -widthValue * 0.5,
+            -heightValue * 0.5,
+            -depthValue * 0.5,
+            widthValue,
+            heightValue,
+            depthValue
         );
     }
 
@@ -112,9 +112,9 @@ public final class Box extends SdfShape {
     @Override
     public List<DoubleParameter> getParameters() {
         return List.of(
-                new DoubleParameter("Width", width, DEFAULT_WIDTH),
-                new DoubleParameter("Height", height, DEFAULT_DEPTH),
-                new DoubleParameter("Depth", depth, DEFAULT_HEIGHT)
+            new DoubleParameter("Width", width, DEFAULT_WIDTH),
+            new DoubleParameter("Height", height, DEFAULT_DEPTH),
+            new DoubleParameter("Depth", depth, DEFAULT_HEIGHT)
         );
     }
 

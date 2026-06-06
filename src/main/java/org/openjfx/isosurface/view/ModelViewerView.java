@@ -57,9 +57,9 @@ public final class ModelViewerView extends Pane {
 
         directionalLight = new DirectionalLight(DIRECTIONAL_LIGHT_COLOUR_FILL);
         directionalLight.getTransforms().addAll(
-                new Rotate(180, Rotate.Z_AXIS),
-                camera.getYaw(),
-                camera.getPitch()
+            new Rotate(180, Rotate.Z_AXIS),
+            camera.getYaw(),
+            camera.getPitch()
         );
 
         final Group subSceneRoot = new Group(camera.getCamera(), model, ambientLight, directionalLight);

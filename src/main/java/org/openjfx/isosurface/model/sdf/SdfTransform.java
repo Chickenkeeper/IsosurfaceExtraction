@@ -9,11 +9,11 @@ import javafx.scene.transform.*;
  * Provides functionality for transforming sdf shapes and their bounding boxes.
  */
 public class SdfTransform {
-    private final Scale scale;
+    private final Translate translation;
     private final Rotate rotationX;
     private final Rotate rotationY;
     private final Rotate rotationZ;
-    private final Translate translation;
+    private final Scale scale;
 
     private Transform localToWorldTransform;
     private Transform worldToLocalTransform;
@@ -24,133 +24,25 @@ public class SdfTransform {
      */
     public SdfTransform() {
         // initialize the separate transforms to their identities
-        this.scale = new Scale(1, 1, 1);
-        this.rotationX = new Rotate(0, Rotate.X_AXIS);
-        this.rotationY = new Rotate(0, Rotate.Y_AXIS);
-        this.rotationZ = new Rotate(0, Rotate.Z_AXIS);
-        this.translation = new Translate(0, 0, 0);
+		this.translation = new Translate(0, 0, 0);
+		this.rotationX = new Rotate(0, Rotate.X_AXIS);
+		this.rotationY = new Rotate(0, Rotate.Y_AXIS);
+		this.rotationZ = new Rotate(0, Rotate.Z_AXIS);
+		this.scale = new Scale(1, 1, 1);
 
         // set up listeners so the combined transforms are only recalculated when a separate transform is changed
-        scale.xProperty().addListener(_ -> combinedTransformDirty = true);
-        scale.yProperty().addListener(_ -> combinedTransformDirty = true);
-        scale.zProperty().addListener(_ -> combinedTransformDirty = true);
-        rotationX.angleProperty().addListener(_ -> combinedTransformDirty = true);
-        rotationY.angleProperty().addListener(_ -> combinedTransformDirty = true);
-        rotationZ.angleProperty().addListener(_ -> combinedTransformDirty = true);
         translation.xProperty().addListener(_ -> combinedTransformDirty = true);
         translation.yProperty().addListener(_ -> combinedTransformDirty = true);
         translation.zProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationX.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationY.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        rotationZ.angleProperty().addListener(_ -> combinedTransformDirty = true);
+        scale.xProperty().addListener(_ -> combinedTransformDirty = true);
+        scale.yProperty().addListener(_ -> combinedTransformDirty = true);
+        scale.zProperty().addListener(_ -> combinedTransformDirty = true);
 
         // initialize the combined transforms
         updateCombinedTransforms();
-    }
-
-    /**
-     * Gets the value of the X-axis scale property.
-     *
-     * @return the value of the X-axis scale property
-     */
-    public double getScaleX() {
-        return scale.getX();
-    }
-
-    /**
-     * Gets the scale along the X-axis.
-     *
-     * @return the scale along the X-axis
-     */
-    public DoubleProperty scaleXProperty() {
-        return scale.xProperty();
-    }
-
-    /**
-     * Gets the value of the Y-axis scale property.
-     *
-     * @return the value of the Y-axis scale property
-     */
-    public double getScaleY() {
-        return scale.getY();
-    }
-
-    /**
-     * Gets the scale along the Y-axis.
-     *
-     * @return the scale along the Y-axis
-     */
-    public DoubleProperty scaleYProperty() {
-        return scale.yProperty();
-    }
-
-    /**
-     * Gets the value of the Z-axis scale property.
-     *
-     * @return the value of the Z-axis scale property
-     */
-    public double getScaleZ() {
-        return scale.getZ();
-    }
-
-    /**
-     * Gets the scale along the Z-axis.
-     *
-     * @return the scale along the Z-axis
-     */
-    public DoubleProperty scaleZProperty() {
-        return scale.zProperty();
-    }
-
-    /**
-     * Gets the value of the X-axis rotation property.
-     *
-     * @return the value of the X-axis rotation property
-     */
-    public double getRotationX() {
-        return rotationX.getAngle();
-    }
-
-    /**
-     * Gets the rotation around the X-axis in degrees.
-     *
-     * @return the rotation around the X-axis in degrees
-     */
-    public DoubleProperty rotationXProperty() {
-        return rotationX.angleProperty();
-    }
-
-    /**
-     * Gets the value of the Y-axis rotation property.
-     *
-     * @return the value of the Y-axis rotation property
-     */
-    public double getRotationY() {
-        return rotationY.getAngle();
-    }
-
-    /**
-     * Gets the rotation around the Y-axis in degrees.
-     *
-     * @return the rotation around the Y-axis in degrees
-     */
-    public DoubleProperty rotationYProperty() {
-        return rotationY.angleProperty();
-    }
-
-    /**
-     * Gets the value of the Z-axis rotation property.
-     *
-     * @return the value of the Z-axis rotation property
-     */
-    public double getRotationZ() {
-        return rotationZ.getAngle();
-    }
-
-    /**
-     * Gets the rotation around the Z-axis in degrees.
-     *
-     * @return the rotation around the Z-axis in degrees
-     */
-    public DoubleProperty rotationZProperty() {
-        return rotationZ.angleProperty();
     }
 
     /**
@@ -208,6 +100,114 @@ public class SdfTransform {
     }
 
     /**
+     * Gets the value of the X-axis rotation property.
+     *
+     * @return the value of the X-axis rotation property
+     */
+    public double getRotationX() {
+        return rotationX.getAngle();
+    }
+
+    /**
+     * Gets the rotation around the X-axis in degrees.
+     *
+     * @return the rotation around the X-axis in degrees
+     */
+    public DoubleProperty rotationXProperty() {
+        return rotationX.angleProperty();
+    }
+
+    /**
+     * Gets the value of the Y-axis rotation property.
+     *
+     * @return the value of the Y-axis rotation property
+     */
+    public double getRotationY() {
+        return rotationY.getAngle();
+    }
+
+    /**
+     * Gets the rotation around the Y-axis in degrees.
+     *
+     * @return the rotation around the Y-axis in degrees
+     */
+    public DoubleProperty rotationYProperty() {
+        return rotationY.angleProperty();
+    }
+
+    /**
+     * Gets the value of the Z-axis rotation property.
+     *
+     * @return the value of the Z-axis rotation property
+     */
+    public double getRotationZ() {
+        return rotationZ.getAngle();
+    }
+
+    /**
+     * Gets the rotation around the Z-axis in degrees.
+     *
+     * @return the rotation around the Z-axis in degrees
+     */
+    public DoubleProperty rotationZProperty() {
+        return rotationZ.angleProperty();
+    }
+
+    /**
+     * Gets the value of the X-axis scale property.
+     *
+     * @return the value of the X-axis scale property
+     */
+    public double getScaleX() {
+        return scale.getX();
+    }
+
+    /**
+     * Gets the scale along the X-axis.
+     *
+     * @return the scale along the X-axis
+     */
+    public DoubleProperty scaleXProperty() {
+        return scale.xProperty();
+    }
+
+    /**
+     * Gets the value of the Y-axis scale property.
+     *
+     * @return the value of the Y-axis scale property
+     */
+    public double getScaleY() {
+        return scale.getY();
+    }
+
+    /**
+     * Gets the scale along the Y-axis.
+     *
+     * @return the scale along the Y-axis
+     */
+    public DoubleProperty scaleYProperty() {
+        return scale.yProperty();
+    }
+
+    /**
+     * Gets the value of the Z-axis scale property.
+     *
+     * @return the value of the Z-axis scale property
+     */
+    public double getScaleZ() {
+        return scale.getZ();
+    }
+
+    /**
+     * Gets the scale along the Z-axis.
+     *
+     * @return the scale along the Z-axis
+     */
+    public DoubleProperty scaleZProperty() {
+        return scale.zProperty();
+    }
+
+    /**
      * Gets an array of points representing the corners of a bounding box.
      *
      * @param bounds the bounding box to extract the corners from
@@ -224,14 +224,14 @@ public class SdfTransform {
 
         // the order of the corners doesn't matter for what they're used for
         return new Point3D[]{
-                new Point3D(minX, minY, minZ),
-                new Point3D(maxX, minY, minZ),
-                new Point3D(minX, maxY, minZ),
-                new Point3D(maxX, maxY, minZ),
-                new Point3D(minX, minY, maxZ),
-                new Point3D(maxX, minY, maxZ),
-                new Point3D(minX, maxY, maxZ),
-                new Point3D(maxX, maxY, maxZ),
+            new Point3D(minX, minY, minZ),
+            new Point3D(maxX, minY, minZ),
+            new Point3D(minX, maxY, minZ),
+            new Point3D(maxX, maxY, minZ),
+            new Point3D(minX, minY, maxZ),
+            new Point3D(maxX, minY, maxZ),
+            new Point3D(minX, maxY, maxZ),
+            new Point3D(maxX, maxY, maxZ),
         };
     }
 
@@ -240,10 +240,10 @@ public class SdfTransform {
      */
     private void updateLocalToWorldTransform() {
         localToWorldTransform = translation.clone()
-                .createConcatenation(rotationZ)
-                .createConcatenation(rotationY)
-                .createConcatenation(rotationX)
-                .createConcatenation(scale);
+            .createConcatenation(rotationZ)
+            .createConcatenation(rotationY)
+            .createConcatenation(rotationX)
+            .createConcatenation(scale);
     }
 
     /**
@@ -253,10 +253,10 @@ public class SdfTransform {
     private void updateWorldToLocalTransform() {
         try {
             worldToLocalTransform = scale.createInverse()
-                    .createConcatenation(rotationX.createInverse())
-                    .createConcatenation(rotationY.createInverse())
-                    .createConcatenation(rotationZ.createInverse())
-                    .createConcatenation(translation.createInverse());
+                .createConcatenation(rotationX.createInverse())
+                .createConcatenation(rotationY.createInverse())
+                .createConcatenation(rotationZ.createInverse())
+                .createConcatenation(translation.createInverse());
         } catch (NonInvertibleTransformException e) {
             // should be unreachable as long as no element of scale is 0
             throw new RuntimeException(e);
@@ -334,12 +334,12 @@ public class SdfTransform {
         }
 
         return new BoundingBox(
-                worldMinX,
-                worldMinY,
-                worldMinZ,
-                worldMaxX - worldMinX,
-                worldMaxY - worldMinY,
-                worldMaxZ - worldMinZ
+            worldMinX,
+            worldMinY,
+            worldMinZ,
+            worldMaxX - worldMinX,
+            worldMaxY - worldMinY,
+            worldMaxZ - worldMinZ
         );
     }
 }

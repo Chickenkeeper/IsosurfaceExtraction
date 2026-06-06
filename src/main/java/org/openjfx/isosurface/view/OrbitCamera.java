@@ -39,11 +39,11 @@ public final class OrbitCamera {
         this.yaw = new Rotate(0, Rotate.Y_AXIS);
         this.camera = new PerspectiveCamera(true);
         this.camera.getTransforms().addAll(
-                new Rotate(180, Rotate.Z_AXIS), // convert to y-up right-handed coordinate system(-ish)
-                this.targetHeight,
-                this.yaw,
-                this.pitch,
-                this.zoom
+            new Rotate(180, Rotate.Z_AXIS), // convert to y-up right-handed coordinate system(-ish)
+            this.targetHeight,
+            this.yaw,
+            this.pitch,
+            this.zoom
         );
         this.camera.setFarClip(1000);
         this.camera.setFieldOfView(75);

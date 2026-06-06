@@ -1,10 +1,10 @@
 package org.openjfx.isosurface.model.suface;
 
 import javafx.scene.shape.TriangleMesh;
-import org.openjfx.isosurface.model.voxel.VoxelGrid;
 import org.openjfx.isosurface.model.util.Axis;
 import org.openjfx.isosurface.model.util.Float3;
 import org.openjfx.isosurface.model.util.Int3;
+import org.openjfx.isosurface.model.voxel.VoxelGrid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,29 +15,29 @@ import java.util.HashMap;
  */
 public class SurfaceNets extends SdfMeshBuilder {
     private static final Int3[] edgeEndOffsets = {
-            new Int3(1, 0, 0),
-            new Int3(0, 1, 0),
-            new Int3(0, 0, 1)
+        new Int3(1, 0, 0),
+        new Int3(0, 1, 0),
+        new Int3(0, 0, 1)
     };
     private static final Int3[][] edgeNeighbourOffsets = {
-            {
-                    new Int3(+0, -1, -1),
-                    new Int3(+0, +0, -1),
-                    new Int3(+0, +0, +0),
-                    new Int3(+0, -1, +0)
-            },
-            {
-                    new Int3(-1, +0, -1),
-                    new Int3(-1, +0, +0),
-                    new Int3(+0, +0, +0),
-                    new Int3(+0, +0, -1)
-            },
-            {
-                    new Int3(-1, -1, +0),
-                    new Int3(+0, -1, +0),
-                    new Int3(+0, +0, +0),
-                    new Int3(-1, +0, +0)
-            }
+        {
+            new Int3(+0, -1, -1),
+            new Int3(+0, +0, -1),
+            new Int3(+0, +0, +0),
+            new Int3(+0, -1, +0)
+        },
+        {
+            new Int3(-1, +0, -1),
+            new Int3(-1, +0, +0),
+            new Int3(+0, +0, +0),
+            new Int3(+0, +0, -1)
+        },
+        {
+            new Int3(-1, -1, +0),
+            new Int3(+0, -1, +0),
+            new Int3(+0, +0, +0),
+            new Int3(-1, +0, +0)
+        }
     };
 
     @Override

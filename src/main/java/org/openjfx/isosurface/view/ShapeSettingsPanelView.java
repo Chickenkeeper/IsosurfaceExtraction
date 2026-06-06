@@ -31,9 +31,9 @@ public class ShapeSettingsPanelView extends GridPane {
         shapeSelector.setItems(applicationViewModel.getShapes());
         shapeSelector.getSelectionModel().select(applicationViewModel.getShapeSelectedIndex());
         shapeSelector.getSelectionModel().selectedIndexProperty().addListener((_, _, newValue) ->
-                applicationViewModel.shapeSelectedIndexProperty().set(newValue.intValue()));
+            applicationViewModel.shapeSelectedIndexProperty().set(newValue.intValue()));
         applicationViewModel.shapeSelectedIndexProperty().addListener((_, _, newValue) ->
-                shapeSelector.getSelectionModel().select(newValue.intValue()));
+            shapeSelector.getSelectionModel().select(newValue.intValue()));
 
         final Label xLabel = new Label("X");
         final Label yLabel = new Label("Y");
@@ -42,33 +42,33 @@ public class ShapeSettingsPanelView extends GridPane {
         final SdfTransform shapeTransform = applicationViewModel.getShapeTransform();
         final Label translationLabel = new Label("Translation");
         final NumberField shapeTranslationX =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationX());
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationX());
         final NumberField shapeTranslationY =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationY());
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationY());
         final NumberField shapeTranslationZ =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationZ());
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getTranslationZ());
         shapeTranslationX.valueProperty().bindBidirectional(shapeTransform.translationXProperty());
         shapeTranslationY.valueProperty().bindBidirectional(shapeTransform.translationYProperty());
         shapeTranslationZ.valueProperty().bindBidirectional(shapeTransform.translationZProperty());
 
         final Label rotationLabel = new Label("Rotation");
         final NumberField shapeRotationX =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationX(), 1.0, "0.0°");
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationX(), 1.0, "0.0°");
         final NumberField shapeRotationY =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationY(), 1.0, "0.0°");
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationY(), 1.0, "0.0°");
         final NumberField shapeRotationZ =
-                new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationZ(), 1.0, "0.0°");
+            new NumberField(-Double.MAX_VALUE, Double.MAX_VALUE, shapeTransform.getRotationZ(), 1.0, "0.0°");
         shapeRotationX.valueProperty().bindBidirectional(shapeTransform.rotationXProperty());
         shapeRotationY.valueProperty().bindBidirectional(shapeTransform.rotationYProperty());
         shapeRotationZ.valueProperty().bindBidirectional(shapeTransform.rotationZProperty());
 
         final Label scaleLabel = new Label("Scale");
         final NumberField shapeScaleX =
-                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleX());
+            new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleX());
         final NumberField shapeScaleY =
-                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleY());
+            new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleY());
         final NumberField shapeScaleZ =
-                new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleZ());
+            new NumberField(0.001, Double.MAX_VALUE, shapeTransform.getScaleZ());
         shapeScaleX.valueProperty().bindBidirectional(shapeTransform.scaleXProperty());
         shapeScaleY.valueProperty().bindBidirectional(shapeTransform.scaleYProperty());
         shapeScaleZ.valueProperty().bindBidirectional(shapeTransform.scaleZProperty());
@@ -98,11 +98,11 @@ public class ShapeSettingsPanelView extends GridPane {
             final RowConstraints rowConstraints = new RowConstraints();
 
             rowConstraints.prefHeightProperty().bind(Bindings.when(
-                    shapeSelector.valueProperty().isEqualTo(shape)).then(rowHeight).otherwise(0.0));
+                shapeSelector.valueProperty().isEqualTo(shape)).then(rowHeight).otherwise(0.0));
             rowConstraints.minHeightProperty().bind(Bindings.when(
-                    shapeSelector.valueProperty().isEqualTo(shape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
+                shapeSelector.valueProperty().isEqualTo(shape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
             rowConstraints.maxHeightProperty().bind(Bindings.when(
-                    shapeSelector.valueProperty().isEqualTo(shape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
+                shapeSelector.valueProperty().isEqualTo(shape)).then(Region.USE_PREF_SIZE).otherwise(0.0));
 
             for (final DoubleParameter parameter : shape.getParameters()) {
                 final Label label = new Label(parameter.name());

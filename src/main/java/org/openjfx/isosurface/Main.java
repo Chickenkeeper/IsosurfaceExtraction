@@ -34,9 +34,9 @@ public final class Main extends Application {
 
         // create left side settings panel
         final VBox settingsPanelVBox = new VBox(
-                new TitledPane("Shape Settings", shapeSettingsPanelView),
-                new TitledPane("Surface Settings", surfaceSettingsPanelView),
-                new TitledPane("Statistics", statisticsPanelView)
+            new TitledPane("Shape Settings", shapeSettingsPanelView),
+            new TitledPane("Surface Settings", surfaceSettingsPanelView),
+            new TitledPane("Statistics", statisticsPanelView)
         );
         final ScrollPane settingsPanelView = new ScrollPane(settingsPanelVBox);
         settingsPanelView.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

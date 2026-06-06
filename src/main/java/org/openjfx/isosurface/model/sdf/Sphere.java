@@ -48,12 +48,12 @@ public final class Sphere extends SdfShape {
         final double diameter = radiusValue * 2.0;
 
         return new BoundingBox(
-                -radiusValue,
-                -radiusValue,
-                -radiusValue,
-                diameter,
-                diameter,
-                diameter
+            -radiusValue,
+            -radiusValue,
+            -radiusValue,
+            diameter,
+            diameter,
+            diameter
         );
     }
 
